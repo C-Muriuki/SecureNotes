@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="utf-8"?>
+<com.google.android.material.card.MaterialCardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    style="@style/Widget.SecureNotes.CardView"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginBottom="@dimen/spacing_medium"
+    app:cardCornerRadius="@dimen/card_corner_radius"
+    app:cardElevation="@dimen/card_elevation">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:padding="@dimen/spacing_medium">
+
+        <TextView
+            android:id="@+id/tvConnectionFirstTitle"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textColor="@color/colorTextPrimary"
+            android:textSize="@dimen/text_size_body"
+            android:textStyle="bold"
+            tools:text="Business idea" />
+
+        <TextView
+            android:id="@+id/tvConnectionFirstPreview"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/spacing_xxsmall"
+            android:maxLines="2"
+            android:ellipsize="end"
+            android:textColor="@color/colorTextSecondary"
+            android:textSize="@dimen/text_size_caption"
+            tools:text="An idea for a community marketplace…" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/min_touch_target_size"
+            android:gravity="center_vertical"
+            android:text="@string/thought_connection_leads_to"
+            android:textColor="@color/colorAccentPrimary"
+            android:textSize="@dimen/text_size_caption" />
+
+        <TextView
+            android:id="@+id/tvConnectionSecondTitle"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textColor="@color/colorTextPrimary"
+            android:textSize="@dimen/text_size_body"
+            android:textStyle="bold"
+            tools:text="Market research" />
+
+        <TextView
+            android:id="@+id/tvConnectionSecondPreview"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/spacing_xxsmall"
+            android:maxLines="2"
+            android:ellipsize="end"
+            android:textColor="@color/colorTextSecondary"
+            android:textSize="@dimen/text_size_caption"
+            tools:text="Notes about the audience and market…" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/spacing_small"
+            android:orientation="horizontal">
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/btnOpenFirstThought"
+                style="@style/Widget.SecureNotes.Button"
+                android:layout_width="0dp"
+                android:layout_height="@dimen/min_touch_target_size"
+                android:layout_marginEnd="@dimen/spacing_xsmall"
+                android:layout_weight="1"
+                android:minWidth="0dp"
+                android:text="@string/thought_connection_open_first" />
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/btnOpenSecondThought"
+                style="@style/Widget.SecureNotes.Button"
+                android:layout_width="0dp"
+                android:layout_height="@dimen/min_touch_target_size"
+                android:layout_marginStart="@dimen/spacing_xsmall"
+                android:layout_weight="1"
+                android:minWidth="0dp"
+                android:text="@string/thought_connection_open_second" />
+
+        </LinearLayout>
+
+    </LinearLayout>
+
+</com.google.android.material.card.MaterialCardView>

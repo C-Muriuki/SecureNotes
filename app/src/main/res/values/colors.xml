@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Secure Notes brand palette: light mode -->
+    <color name="colorBackground">#F7F8FA</color>
+    <color name="colorCardSurface">#FFFFFF</color>
+    <color name="colorElevatedSurface">#E7F3F0</color>
+    <color name="colorInputSurface">#F3F6F8</color>
+    <color name="colorBorder">#E1E7EC</color>
+    <color name="colorTextPrimary">#263648</color>
+    <color name="colorTextSecondary">#697887</color>
+    <color name="colorTextMuted">#8995A1</color>
+    <color name="colorAccentPrimary">#14263D</color>
+    <color name="colorAccentSecondary">#087F83</color>
+    <color name="colorHighlight">#38B8AA</color>
+    <color name="colorIconMuted">#8995A1</color>
+    <color name="colorNavSelected">#E7F3F0</color>
+    <color name="colorDisabled">#B8C2CB</color>
+
+    <!-- Semantic feedback colors -->
+    <color name="colorError">#C74747</color>
+    <color name="colorSuccess">#21865B</color>
+    <color name="colorWarning">#B7791F</color>
+    <color name="colorInfo">#3478A8</color>
+    <color name="colorOnPrimary">#FFFFFF</color>
+    <color name="colorOnSurface">#263648</color>
+
+    <!-- Raw constants used by platform widgets -->
+    <color name="black">#000000</color>
+    <color name="white">#FFFFFF</color>
+    <color name="transparent">#00000000</color>
+</resources>

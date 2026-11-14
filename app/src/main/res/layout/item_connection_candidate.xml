@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="utf-8"?>
+<com.google.android.material.card.MaterialCardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    style="@style/Widget.SecureNotes.CardView"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginBottom="@dimen/spacing_small"
+    app:cardCornerRadius="@dimen/card_corner_radius"
+    app:cardElevation="@dimen/card_elevation">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center_vertical"
+        android:orientation="horizontal"
+        android:paddingStart="@dimen/spacing_medium"
+        android:paddingTop="@dimen/spacing_small"
+        android:paddingEnd="@dimen/spacing_small"
+        android:paddingBottom="@dimen/spacing_small">
+
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:orientation="vertical"
+            android:paddingVertical="@dimen/spacing_xsmall">
+
+            <TextView
+                android:id="@+id/tvCandidateTitle"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textColor="@color/colorTextPrimary"
+                android:textSize="@dimen/text_size_body"
+                android:textStyle="bold"
+                tools:text="Meeting notes" />
+
+            <TextView
+                android:id="@+id/tvCandidatePreview"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/spacing_xxsmall"
+                android:maxLines="2"
+                android:ellipsize="end"
+                android:textColor="@color/colorTextSecondary"
+                android:textSize="@dimen/text_size_caption"
+                tools:text="A brief preview of the note…" />
+
+        </LinearLayout>
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/btnConnectCandidate"
+            style="@style/Widget.SecureNotes.Button"
+            android:layout_width="wrap_content"
+            android:layout_height="@dimen/min_touch_target_size"
+            android:layout_marginStart="@dimen/spacing_small"
+            android:minWidth="0dp"
+            android:text="@string/action_connect" />
+
+    </LinearLayout>
+
+</com.google.android.material.card.MaterialCardView>

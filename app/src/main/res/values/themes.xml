@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:tools="http://schemas.android.com/tools">
+    <!-- Base application theme. -->
+    <style name="Base.Theme.SecureNotes" parent="Theme.Material3.DayNight.NoActionBar">
+        <!-- Brand & System Colors -->
+        <item name="colorPrimary">@color/colorAccentPrimary</item>
+        <item name="colorOnPrimary">@color/colorOnPrimary</item>
+        <item name="colorSecondary">@color/colorAccentSecondary</item>
+        <item name="colorControlActivated">@color/colorAccentSecondary</item>
+        <item name="colorControlHighlight">@color/colorNavSelected</item>
+        <item name="colorOnSecondary">@color/colorOnPrimary</item>
+        <item name="colorError">@color/colorError</item>
+
+        <!-- Surface & Background Colors -->
+        <item name="android:colorBackground">@color/colorBackground</item>
+        <item name="colorSurface">@color/colorCardSurface</item>
+        <item name="colorOnSurface">@color/colorOnSurface</item>
+        <item name="colorSurfaceVariant">@color/colorElevatedSurface</item>
+        <item name="colorOutline">@color/colorBorder</item>
+
+        <!-- Window System Bars -->
+        <item name="android:statusBarColor">@color/colorBackground</item>
+        <item name="android:navigationBarColor">@color/colorBackground</item>
+        <item name="android:windowLightStatusBar">true</item>
+        <item name="android:windowLightNavigationBar" tools:targetApi="o_mr1">true</item>
+
+        <!-- Default Component Styling -->
+        <item name="materialCardViewStyle">@style/Widget.SecureNotes.CardView</item>
+        <item name="materialButtonStyle">@style/Widget.SecureNotes.Button</item>
+    </style>
+
+    <style name="Theme.SecureNotes" parent="Base.Theme.SecureNotes" />
+
+    <!-- Custom Component Styles -->
+    <style name="Widget.SecureNotes.CardView" parent="Widget.Material3.CardView.Elevated">
+        <item name="cardBackgroundColor">@color/colorCardSurface</item>
+        <item name="cardCornerRadius">@dimen/card_corner_radius</item>
+        <item name="cardElevation">@dimen/card_elevation</item>
+        <item name="strokeColor">@color/colorBorder</item>
+        <item name="strokeWidth">@dimen/card_stroke_width</item>
+    </style>
+
+    <style name="Widget.SecureNotes.Button" parent="Widget.Material3.Button">
+        <item name="cornerRadius">@dimen/button_corner_radius</item>
+        <item name="android:minHeight">@dimen/min_touch_target_size</item>
+        <item name="android:textSize">@dimen/text_size_body</item>
+    </style>
+
+    <style name="Widget.SecureNotes.TextInputLayout" parent="Widget.Material3.TextInputLayout.OutlinedBox">
+        <item name="boxBackgroundColor">@color/colorInputSurface</item>
+        <item name="boxCornerRadiusTopStart">@dimen/input_corner_radius</item>
+        <item name="boxCornerRadiusTopEnd">@dimen/input_corner_radius</item>
+        <item name="boxCornerRadiusBottomStart">@dimen/input_corner_radius</item>
+        <item name="boxCornerRadiusBottomEnd">@dimen/input_corner_radius</item>
+        <item name="boxStrokeColor">@color/colorAccentPrimary</item>
+    </style>
+</resources>

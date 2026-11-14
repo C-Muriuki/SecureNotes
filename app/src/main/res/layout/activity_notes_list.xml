@@ -1,0 +1,126 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/mainNotesList"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/colorBackground"
+    tools:context=".activities.NotesListActivity">
+
+    <!-- Top Toolbar Header -->
+    <LinearLayout
+        android:id="@+id/toolbarNotes"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center_vertical"
+        android:orientation="horizontal"
+        android:padding="@dimen/spacing_medium"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/spacing_small"
+            android:layout_weight="1"
+            android:text="@string/title_my_notes"
+            android:textColor="@color/colorTextPrimary"
+            android:textSize="@dimen/text_size_heading"
+            android:textStyle="bold" />
+
+        <ImageButton
+            android:id="@+id/btnSearchNotes"
+            android:layout_width="@dimen/min_touch_target_size"
+            android:layout_height="@dimen/min_touch_target_size"
+            android:background="?attr/selectableItemBackgroundBorderless"
+            android:contentDescription="@string/action_search"
+            android:src="@drawable/ic_search"
+            app:tint="@color/colorIconMuted" />
+
+    </LinearLayout>
+
+    <!-- Filter Chip Group -->
+    <com.google.android.material.chip.ChipGroup
+        android:id="@+id/chipGroupFilter"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingHorizontal="@dimen/spacing_large"
+        app:layout_constraintTop_toBottomOf="@+id/toolbarNotes"
+        app:singleSelection="true">
+
+        <com.google.android.material.chip.Chip
+            android:id="@+id/chipAll"
+            style="@style/Widget.Material3.Chip.Filter"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:checked="true"
+            android:text="@string/nav_notes"
+            android:textColor="@color/colorTextPrimary" />
+
+        <com.google.android.material.chip.Chip
+            android:id="@+id/chipPinned"
+            style="@style/Widget.Material3.Chip.Filter"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/dashboard_section_pinned"
+            android:textColor="@color/colorTextPrimary" />
+
+        <com.google.android.material.chip.Chip
+            android:id="@+id/chipRecent"
+            style="@style/Widget.Material3.Chip.Filter"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/dashboard_section_recent"
+            android:textColor="@color/colorTextPrimary" />
+
+    </com.google.android.material.chip.ChipGroup>
+
+    <!-- Notes RecyclerView -->
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/rvAllNotes"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_marginTop="@dimen/spacing_small"
+        android:paddingHorizontal="@dimen/spacing_large"
+        app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+        app:layout_constraintBottom_toTopOf="@+id/bottomNavNotes"
+        app:layout_constraintTop_toBottomOf="@+id/chipGroupFilter"
+        tools:listitem="@layout/item_note" />
+
+    <!-- Included Empty State Component -->
+    <include
+        android:id="@+id/layoutEmptyStateNotes"
+        layout="@layout/layout_empty_state"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:visibility="gone"
+        app:layout_constraintBottom_toTopOf="@+id/bottomNavNotes"
+        app:layout_constraintTop_toBottomOf="@+id/chipGroupFilter" />
+
+    <!-- FAB for Quick Creation -->
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/fabNotesListCreate"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="@dimen/spacing_large"
+        android:layout_marginBottom="@dimen/spacing_large"
+        android:contentDescription="@string/cd_add_note"
+        android:src="@drawable/ic_add"
+        app:backgroundTint="@color/colorAccentPrimary"
+        app:layout_constraintBottom_toTopOf="@+id/bottomNavNotes"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:tint="@color/colorOnPrimary" />
+
+    <!-- Bottom Navigation Bar -->
+    <com.google.android.material.bottomnavigation.BottomNavigationView
+        android:id="@+id/bottomNavNotes"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/colorCardSurface"
+        app:itemIconTint="@color/bottom_nav_item_tint"
+        app:itemTextColor="@color/bottom_nav_item_tint"
+        app:itemBackground="@drawable/bottom_nav_item_background"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:menu="@menu/bottom_nav_menu" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

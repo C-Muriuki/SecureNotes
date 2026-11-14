@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="108dp"
+    android:height="108dp"
+    android:viewportWidth="108"
+    android:viewportHeight="108">
+    <!-- Layered paper mark sized for the adaptive-icon safe zone. -->
+    <path
+        android:fillColor="#00000000"
+        android:pathData="M32,31v38c0,4 3,7 7,7h23"
+        android:strokeColor="#91A9C8"
+        android:strokeLineCap="round"
+        android:strokeWidth="5" />
+    <path
+        android:fillColor="#FFFFFF"
+        android:pathData="M43,22h21l17,17v36c0,4 -3,7 -7,7H43c-4,0 -7,-3 -7,-7V29c0,-4 3,-7 7,-7z" />
+    <path
+        android:fillColor="#38B8AA"
+        android:pathData="M64,22v12c0,3 2,5 5,5h12z" />
+    <path
+        android:fillColor="#14263D"
+        android:pathData="M47,49h23v4H47zM47,59h18v4H47zM47,69h12v4H47z" />
+</vector>

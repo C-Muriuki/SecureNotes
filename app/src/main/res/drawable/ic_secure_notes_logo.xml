@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="64dp"
+    android:height="64dp"
+    android:viewportWidth="64"
+    android:viewportHeight="64">
+    <!-- A second offset page gives the mark its layered, organised silhouette. -->
+    <path
+        android:fillColor="#00000000"
+        android:pathData="M13,17v34c0,3 2,5 5,5h22"
+        android:strokeColor="@color/colorAccentSecondary"
+        android:strokeLineCap="round"
+        android:strokeWidth="4" />
+    <!-- Folded page body. -->
+    <path
+        android:fillColor="@color/colorAccentPrimary"
+        android:pathData="M21,7h17l12,12v31c0,3 -2,5 -5,5H21c-3,0 -5,-2 -5,-5V12c0,-3 2,-5 5,-5z" />
+    <path
+        android:fillColor="@color/colorAccentSecondary"
+        android:pathData="M38,7v9c0,2 1,3 3,3h9z" />
+    <!-- Three varying writing strokes form a compact, recognizable note mark. -->
+    <path
+        android:fillColor="#FFFFFF"
+        android:pathData="M24,27h17v2.5H24zM24,34h13v2.5H24zM24,41h9v2.5H24z" />
+</vector>

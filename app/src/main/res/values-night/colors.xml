@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Midnight Graphite dark palette -->
+    <color name="colorBackground">#11151B</color>
+    <color name="colorCardSurface">#191F28</color>
+    <color name="colorElevatedSurface">#222B36</color>
+    <color name="colorInputSurface">#202833</color>
+    <color name="colorBorder">#303B49</color>
+    <color name="colorTextPrimary">#E9EDF2</color>
+    <color name="colorTextSecondary">#A5AFBC</color>
+    <color name="colorTextMuted">#82909F</color>
+    <color name="colorAccentPrimary">#91A9C8</color>
+    <color name="colorAccentSecondary">#8297B0</color>
+    <color name="colorHighlight">#C3A77A</color>
+    <color name="colorIconMuted">#8297B0</color>
+    <color name="colorNavSelected">#293747</color>
+    <color name="colorDisabled">#596575</color>
+
+    <!-- Semantic feedback colors -->
+    <color name="colorError">#DF7777</color>
+    <color name="colorSuccess">#66B58D</color>
+    <color name="colorWarning">#D6A65F</color>
+    <color name="colorInfo">#83ADD3</color>
+    <color name="colorOnPrimary">#11151B</color>
+    <color name="colorOnSurface">#E9EDF2</color>
+</resources>

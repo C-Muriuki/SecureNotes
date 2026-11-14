@@ -1,0 +1,397 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/mainNoteDetail"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/colorBackground"
+    tools:context=".activities.NoteDetailActivity">
+
+    <!-- Toolbar Header -->
+    <LinearLayout
+        android:id="@+id/toolbarDetail"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center_vertical"
+        android:orientation="horizontal"
+        android:padding="@dimen/spacing_medium"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <ImageButton
+            android:id="@+id/btnDetailBack"
+            android:layout_width="@dimen/min_touch_target_size"
+            android:layout_height="@dimen/min_touch_target_size"
+            android:background="?attr/selectableItemBackgroundBorderless"
+            android:contentDescription="@string/cd_back_button"
+            android:src="@drawable/ic_arrow_back"
+            app:tint="@color/colorTextPrimary" />
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/spacing_small"
+            android:layout_weight="1"
+            android:text="@string/title_note_detail"
+            android:textColor="@color/colorTextPrimary"
+            android:textSize="@dimen/text_size_subheading"
+            android:textStyle="bold" />
+
+        <ImageButton
+            android:id="@+id/btnDetailPin"
+            android:layout_width="@dimen/min_touch_target_size"
+            android:layout_height="@dimen/min_touch_target_size"
+            android:background="?attr/selectableItemBackgroundBorderless"
+            android:contentDescription="@string/action_pin_note"
+            android:src="@drawable/ic_pin"
+            app:tint="@color/colorIconMuted" />
+
+        <ImageButton
+            android:id="@+id/btnDetailShare"
+            android:layout_width="@dimen/min_touch_target_size"
+            android:layout_height="@dimen/min_touch_target_size"
+            android:background="?attr/selectableItemBackgroundBorderless"
+            android:contentDescription="@string/action_share"
+            android:src="@drawable/ic_share"
+            app:tint="@color/colorAccentPrimary" />
+
+        <ImageButton
+            android:id="@+id/btnDetailEdit"
+            android:layout_width="@dimen/min_touch_target_size"
+            android:layout_height="@dimen/min_touch_target_size"
+            android:background="?attr/selectableItemBackgroundBorderless"
+            android:contentDescription="@string/action_edit"
+            android:src="@drawable/ic_edit"
+            app:tint="@color/colorAccentPrimary" />
+
+        <ImageButton
+            android:id="@+id/btnDetailDelete"
+            android:layout_width="@dimen/min_touch_target_size"
+            android:layout_height="@dimen/min_touch_target_size"
+            android:background="?attr/selectableItemBackgroundBorderless"
+            android:contentDescription="@string/action_delete"
+            android:src="@drawable/ic_delete"
+            app:tint="@color/colorError" />
+
+    </LinearLayout>
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:fillViewport="true"
+        android:padding="@dimen/spacing_large"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/toolbarDetail">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <!-- Metadata Card -->
+            <com.google.android.material.card.MaterialCardView
+                style="@style/Widget.SecureNotes.CardView"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:cardCornerRadius="@dimen/card_corner_radius"
+                app:cardElevation="@dimen/card_elevation">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:padding="@dimen/spacing_medium">
+
+                    <ImageView
+                        android:layout_width="@dimen/icon_size_medium"
+                        android:layout_height="@dimen/icon_size_medium"
+                        android:contentDescription="@string/indicator_encrypted"
+                        android:src="@drawable/ic_lock_shield"
+                        app:tint="@color/colorAccentPrimary" />
+
+                    <LinearLayout
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="@dimen/spacing_medium"
+                        android:layout_weight="1"
+                        android:orientation="vertical">
+
+                        <TextView
+                            android:id="@+id/tvDetailEncryptionBadge"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="@string/indicator_encrypted"
+                            android:textColor="@color/colorAccentPrimary"
+                            android:textSize="@dimen/text_size_body_secondary"
+                            android:textStyle="bold" />
+
+                        <TextView
+                            android:id="@+id/tvDetailTimestamps"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="@dimen/spacing_xxsmall"
+                            android:text="@string/indicator_edited"
+                            android:textColor="@color/colorTextSecondary"
+                            android:textSize="@dimen/text_size_caption" />
+
+                    </LinearLayout>
+
+                </LinearLayout>
+
+            </com.google.android.material.card.MaterialCardView>
+
+            <!-- Note Title and Content Card -->
+            <com.google.android.material.card.MaterialCardView
+                style="@style/Widget.SecureNotes.CardView"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/spacing_medium"
+                app:cardCornerRadius="@dimen/card_corner_radius"
+                app:cardElevation="@dimen/card_elevation">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:padding="@dimen/spacing_large">
+
+                    <TextView
+                        android:id="@+id/tvDetailNoteTitle"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="@string/label_note_title"
+                        android:textColor="@color/colorTextPrimary"
+                        android:textSize="@dimen/text_size_heading"
+                        android:textStyle="bold" />
+
+                    <View
+                        android:layout_width="match_parent"
+                        android:layout_height="@dimen/divider_thickness"
+                        android:layout_marginVertical="@dimen/spacing_medium"
+                        android:background="@color/colorBorder" />
+
+                    <TextView
+                        android:id="@+id/tvDetailNoteContent"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:lineSpacingExtra="4dp"
+                        android:text="@string/hint_note_content"
+                        android:textColor="@color/colorTextPrimary"
+                        android:textSize="@dimen/text_size_body" />
+
+                </LinearLayout>
+
+            </com.google.android.material.card.MaterialCardView>
+
+            <!-- Idea Journey Section -->
+            <com.google.android.material.card.MaterialCardView
+                style="@style/Widget.SecureNotes.CardView"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/spacing_medium"
+                app:cardCornerRadius="@dimen/card_corner_radius"
+                app:cardElevation="@dimen/card_elevation">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:padding="@dimen/spacing_medium">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:gravity="center_vertical"
+                        android:orientation="horizontal">
+
+                        <TextView
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:text="@string/idea_journey_title"
+                            android:textColor="@color/colorTextPrimary"
+                            android:textSize="@dimen/text_size_subheading"
+                            android:textStyle="bold" />
+
+                        <com.google.android.material.button.MaterialButton
+                            android:id="@+id/btnChangeIdeaStage"
+                            style="@style/Widget.SecureNotes.Button"
+                            android:layout_width="wrap_content"
+                            android:layout_height="@dimen/min_touch_target_size"
+                            android:minWidth="0dp"
+                            android:text="@string/idea_journey_change_stage" />
+
+                    </LinearLayout>
+
+                    <TextView
+                        android:id="@+id/tvIdeaJourneyStageBadge"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/spacing_xxsmall"
+                        android:text="@string/idea_journey_current_stage"
+                        android:textColor="@color/colorAccentSecondary"
+                        android:textSize="@dimen/text_size_body_secondary"
+                        android:textStyle="bold" />
+
+                    <!-- 4-Stage Visual Indicator Bar -->
+                    <LinearLayout
+                        android:id="@+id/layoutStageIndicator"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/spacing_medium"
+                        android:orientation="horizontal"
+                        android:weightSum="4">
+
+                        <TextView
+                            android:id="@+id/stageIndicatorCaptured"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_marginEnd="2dp"
+                            android:layout_weight="1"
+                            android:background="@color/colorNavSelected"
+                            android:gravity="center"
+                            android:paddingVertical="@dimen/spacing_xsmall"
+                            android:text="@string/idea_stage_captured"
+                            android:textColor="@color/colorTextPrimary"
+                            android:textSize="@dimen/text_size_caption" />
+
+                        <TextView
+                            android:id="@+id/stageIndicatorExploring"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_marginHorizontal="2dp"
+                            android:layout_weight="1"
+                            android:background="@color/colorNavSelected"
+                            android:gravity="center"
+                            android:paddingVertical="@dimen/spacing_xsmall"
+                            android:text="@string/idea_stage_exploring"
+                            android:textColor="@color/colorTextPrimary"
+                            android:textSize="@dimen/text_size_caption" />
+
+                        <TextView
+                            android:id="@+id/stageIndicatorDeveloping"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_marginHorizontal="2dp"
+                            android:layout_weight="1"
+                            android:background="@color/colorNavSelected"
+                            android:gravity="center"
+                            android:paddingVertical="@dimen/spacing_xsmall"
+                            android:text="@string/idea_stage_developing"
+                            android:textColor="@color/colorTextPrimary"
+                            android:textSize="@dimen/text_size_caption" />
+
+                        <TextView
+                            android:id="@+id/stageIndicatorCompleted"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="2dp"
+                            android:layout_weight="1"
+                            android:background="@color/colorNavSelected"
+                            android:gravity="center"
+                            android:paddingVertical="@dimen/spacing_xsmall"
+                            android:text="@string/idea_stage_completed"
+                            android:textColor="@color/colorTextPrimary"
+                            android:textSize="@dimen/text_size_caption" />
+
+                    </LinearLayout>
+
+                    <View
+                        android:layout_width="match_parent"
+                        android:layout_height="@dimen/divider_thickness"
+                        android:layout_marginVertical="@dimen/spacing_medium"
+                        android:background="@color/colorBorder" />
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="@string/idea_journey_history_title"
+                        android:textColor="@color/colorTextPrimary"
+                        android:textSize="@dimen/text_size_body_secondary"
+                        android:textStyle="bold" />
+
+                    <ProgressBar
+                        android:id="@+id/progressIdeaHistory"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center_horizontal"
+                        android:layout_marginTop="@dimen/spacing_small"
+                        android:visibility="gone" />
+
+                    <TextView
+                        android:id="@+id/tvIdeaHistoryEmpty"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/spacing_small"
+                        android:text="@string/idea_journey_history_empty"
+                        android:textColor="@color/colorTextSecondary"
+                        android:textSize="@dimen/text_size_caption"
+                        android:visibility="gone" />
+
+                    <androidx.recyclerview.widget.RecyclerView
+                        android:id="@+id/rvIdeaHistory"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/spacing_xsmall"
+                        android:nestedScrollingEnabled="false" />
+
+                </LinearLayout>
+
+            </com.google.android.material.card.MaterialCardView>
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/spacing_large"
+                android:text="@string/note_detail_related_thoughts"
+                android:textColor="@color/colorTextPrimary"
+                android:textSize="@dimen/text_size_subheading"
+                android:textStyle="bold" />
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/spacing_xsmall"
+                android:text="@string/note_detail_related_add_description"
+                android:textColor="@color/colorTextSecondary"
+                android:textSize="@dimen/text_size_caption" />
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/btnAddThoughtConnection"
+                style="@style/Widget.SecureNotes.Button"
+                android:layout_width="wrap_content"
+                android:layout_height="@dimen/min_touch_target_size"
+                android:layout_marginTop="@dimen/spacing_small"
+                android:text="@string/thought_connections_add"
+                app:icon="@drawable/ic_add" />
+
+            <ProgressBar
+                android:id="@+id/progressRelatedThoughts"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:layout_marginTop="@dimen/spacing_small"
+                android:visibility="gone" />
+
+            <TextView
+                android:id="@+id/tvRelatedThoughtsEmpty"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/spacing_small"
+                android:text="@string/note_detail_related_empty"
+                android:textColor="@color/colorTextSecondary"
+                android:textSize="@dimen/text_size_body_secondary"
+                android:visibility="gone" />
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/rvRelatedThoughts"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/spacing_small"
+                android:nestedScrollingEnabled="false" />
+
+        </LinearLayout>
+
+    </ScrollView>
+
+</androidx.constraintlayout.widget.ConstraintLayout>

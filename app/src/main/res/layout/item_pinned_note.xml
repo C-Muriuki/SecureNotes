@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="utf-8"?>
+<com.google.android.material.card.MaterialCardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/cardPinnedItem"
+    style="@style/Widget.SecureNotes.CardView"
+    android:layout_width="@dimen/pinned_note_card_width"
+    android:layout_height="wrap_content"
+    android:minHeight="@dimen/pinned_note_card_min_height"
+    android:layout_marginEnd="@dimen/spacing_medium"
+    android:clickable="true"
+    android:focusable="true">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:padding="@dimen/spacing_medium">
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <ImageView
+                android:layout_width="@dimen/icon_size_small"
+                android:layout_height="@dimen/icon_size_small"
+                android:layout_alignParentStart="true"
+                android:contentDescription="@string/indicator_pinned"
+                android:src="@drawable/ic_pin"
+                app:tint="@color/colorHighlight" />
+
+            <ImageView
+                android:layout_width="@dimen/icon_size_small"
+                android:layout_height="@dimen/icon_size_small"
+                android:layout_alignParentEnd="true"
+                android:contentDescription="@string/indicator_encrypted"
+                android:src="@drawable/ic_lock_shield"
+                app:tint="@color/colorAccentPrimary" />
+
+        </RelativeLayout>
+
+        <TextView
+            android:id="@+id/tvPinnedTitle"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/spacing_small"
+            android:ellipsize="end"
+            android:maxLines="1"
+            android:text="@string/label_note_title"
+            android:textColor="@color/colorTextPrimary"
+            android:textSize="@dimen/text_size_body"
+            android:textStyle="bold" />
+
+        <TextView
+            android:id="@+id/tvPinnedSnippet"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/spacing_xsmall"
+            android:ellipsize="end"
+            android:maxLines="3"
+            android:text="@string/hint_note_content"
+            android:textColor="@color/colorTextSecondary"
+            android:textSize="@dimen/text_size_caption" />
+
+    </LinearLayout>
+
+</com.google.android.material.card.MaterialCardView>

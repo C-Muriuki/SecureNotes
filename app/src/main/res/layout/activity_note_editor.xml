@@ -1,0 +1,175 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/mainNoteEditor"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/colorBackground"
+    tools:context=".activities.NoteEditorActivity">
+
+    <!-- Top Action Toolbar -->
+    <LinearLayout
+        android:id="@+id/toolbarEditor"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center_vertical"
+        android:orientation="horizontal"
+        android:padding="@dimen/spacing_medium"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <ImageButton
+            android:id="@+id/btnBack"
+            android:layout_width="@dimen/min_touch_target_size"
+            android:layout_height="@dimen/min_touch_target_size"
+            android:background="?attr/selectableItemBackgroundBorderless"
+            android:contentDescription="@string/cd_back_button"
+            android:src="@drawable/ic_arrow_back"
+            app:tint="@color/colorTextPrimary" />
+
+        <TextView
+            android:id="@+id/tvEditorTitle"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/spacing_small"
+            android:layout_weight="1"
+            android:text="@string/title_new_note"
+            android:textColor="@color/colorTextPrimary"
+            android:textSize="@dimen/text_size_subheading"
+            android:textStyle="bold" />
+
+        <ImageButton
+            android:id="@+id/btnPinNote"
+            android:layout_width="@dimen/min_touch_target_size"
+            android:layout_height="@dimen/min_touch_target_size"
+            android:background="?attr/selectableItemBackgroundBorderless"
+            android:contentDescription="@string/indicator_pinned"
+            android:src="@drawable/ic_pin"
+            app:tint="@color/colorIconMuted" />
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/btnSaveNote"
+            style="@style/Widget.SecureNotes.Button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/spacing_small"
+            android:text="@string/action_save"
+            android:textColor="@color/colorOnPrimary"
+            app:backgroundTint="@color/colorAccentPrimary" />
+
+    </LinearLayout>
+
+    <!-- Encryption Banner Badge -->
+    <LinearLayout
+        android:id="@+id/bannerEncryption"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/colorElevatedSurface"
+        android:gravity="center"
+        android:orientation="horizontal"
+        android:padding="@dimen/spacing_small"
+        app:layout_constraintTop_toBottomOf="@+id/toolbarEditor">
+
+        <ImageView
+            android:layout_width="@dimen/icon_size_small"
+            android:layout_height="@dimen/icon_size_small"
+            android:contentDescription="@string/indicator_encrypted"
+            android:src="@drawable/ic_lock_shield"
+            app:tint="@color/colorAccentPrimary" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/spacing_small"
+            android:text="@string/setting_security_info_summary"
+            android:textColor="@color/colorAccentPrimary"
+            android:textSize="@dimen/text_size_caption"
+            android:textStyle="bold" />
+
+    </LinearLayout>
+
+    <!-- Editor Scrollable Inputs -->
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:fillViewport="true"
+        android:padding="@dimen/spacing_large"
+        app:layout_constraintBottom_toTopOf="@+id/barEditorInfo"
+        app:layout_constraintTop_toBottomOf="@+id/bannerEncryption">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <EditText
+                android:id="@+id/etNoteTitle"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@null"
+                android:hint="@string/hint_note_title"
+                android:importantForAutofill="no"
+                android:inputType="textCapSentences"
+                android:minHeight="@dimen/min_touch_target_size"
+                android:textColor="@color/colorTextPrimary"
+                android:textColorHint="@color/colorTextSecondary"
+                android:textSize="@dimen/text_size_heading"
+                android:textStyle="bold" />
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/divider_thickness"
+                android:layout_marginVertical="@dimen/spacing_medium"
+                android:background="@color/colorBorder" />
+
+            <EditText
+                android:id="@+id/etNoteContent"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@null"
+                android:gravity="top"
+                android:hint="@string/hint_note_content"
+                android:importantForAutofill="no"
+                android:inputType="textMultiLine"
+                android:lineSpacingExtra="4dp"
+                android:minHeight="240dp"
+                android:textColor="@color/colorTextPrimary"
+                android:textColorHint="@color/colorTextSecondary"
+                android:textSize="@dimen/text_size_body" />
+
+        </LinearLayout>
+
+    </ScrollView>
+
+    <!-- Bottom Status Info Bar -->
+    <LinearLayout
+        android:id="@+id/barEditorInfo"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/colorCardSurface"
+        android:gravity="center_vertical"
+        android:orientation="horizontal"
+        android:padding="@dimen/spacing_medium"
+        app:layout_constraintBottom_toBottomOf="parent">
+
+        <TextView
+            android:id="@+id/tvWordCount"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="@string/info_word_count"
+            android:textColor="@color/colorTextSecondary"
+            android:textSize="@dimen/text_size_caption" />
+
+        <TextView
+            android:id="@+id/tvSaveStatus"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/info_draft_saved"
+            android:textColor="@color/colorIconMuted"
+            android:textSize="@dimen/text_size_caption"
+            android:textStyle="italic" />
+
+    </LinearLayout>
+
+</androidx.constraintlayout.widget.ConstraintLayout>

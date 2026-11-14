@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<full-backup-content>
+    <!-- Notes require a device-local Android Keystore key and cannot be restored elsewhere. -->
+    <exclude domain="database" path="." />
+    <!-- Session identity and lockout state must never move to another installation. -->
+    <exclude domain="sharedpref" path="secure_notes_session_prefs.xml" />
+    <!-- Manual backups contain ciphertext tied to the original device Keystore key. -->
+    <exclude domain="file" path="backups/" />
+</full-backup-content>

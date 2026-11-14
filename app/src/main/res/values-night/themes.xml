@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:tools="http://schemas.android.com/tools">
+    <!-- Base application theme for Midnight Graphite Dark Mode -->
+    <style name="Base.Theme.SecureNotes" parent="Theme.Material3.DayNight.NoActionBar">
+        <!-- Brand & System Colors -->
+        <item name="colorPrimary">@color/colorAccentPrimary</item>
+        <item name="colorOnPrimary">@color/colorOnPrimary</item>
+        <item name="colorSecondary">@color/colorAccentSecondary</item>
+        <item name="colorControlActivated">@color/colorAccentPrimary</item>
+        <item name="colorControlHighlight">@color/colorNavSelected</item>
+        <item name="colorOnSecondary">@color/colorOnPrimary</item>
+        <item name="colorError">@color/colorError</item>
+
+        <!-- Surface & Background Colors -->
+        <item name="android:colorBackground">@color/colorBackground</item>
+        <item name="colorSurface">@color/colorCardSurface</item>
+        <item name="colorOnSurface">@color/colorOnSurface</item>
+        <item name="colorSurfaceVariant">@color/colorElevatedSurface</item>
+        <item name="colorOutline">@color/colorBorder</item>
+
+        <!-- Window System Bars -->
+        <item name="android:statusBarColor">@color/colorBackground</item>
+        <item name="android:navigationBarColor">@color/colorBackground</item>
+        <item name="android:windowLightStatusBar">false</item>
+        <item name="android:windowLightNavigationBar" tools:targetApi="o_mr1">false</item>
+
+        <!-- Default Component Styling -->
+        <item name="materialCardViewStyle">@style/Widget.SecureNotes.CardView</item>
+        <item name="materialButtonStyle">@style/Widget.SecureNotes.Button</item>
+    </style>
+</resources>

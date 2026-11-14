@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Shared spacing scale -->
+    <dimen name="spacing_xxsmall">2dp</dimen>
+    <dimen name="spacing_xsmall">4dp</dimen>
+    <dimen name="spacing_small">8dp</dimen>
+    <dimen name="spacing_medium">16dp</dimen>
+    <dimen name="spacing_large">24dp</dimen>
+    <dimen name="spacing_xlarge">32dp</dimen>
+    <dimen name="spacing_xxlarge">48dp</dimen>
+    <dimen name="spacing_huge">64dp</dimen>
+
+    <!-- Touch target and brand mark sizes -->
+    <dimen name="min_touch_target_size">48dp</dimen>
+    <dimen name="brand_logo_small">64dp</dimen>
+    <dimen name="brand_logo_medium">72dp</dimen>
+    <dimen name="brand_logo_large">80dp</dimen>
+    <dimen name="profile_avatar_size">72dp</dimen>
+    <dimen name="divider_thickness">1dp</dimen>
+    <dimen name="pinned_note_card_min_height">140dp</dimen>
+
+    <!-- Typography scale -->
+    <dimen name="text_size_caption">12sp</dimen>
+    <dimen name="text_size_body_secondary">14sp</dimen>
+    <dimen name="text_size_body">16sp</dimen>
+    <dimen name="text_size_subheading">18sp</dimen>
+    <dimen name="text_size_heading">28sp</dimen>
+    <dimen name="text_size_title">28sp</dimen>
+    <dimen name="text_size_display">34sp</dimen>
+
+    <!-- Reusable component dimensions -->
+    <dimen name="card_corner_radius">18dp</dimen>
+    <dimen name="button_corner_radius">14dp</dimen>
+    <dimen name="input_corner_radius">12dp</dimen>
+    <dimen name="card_elevation">1dp</dimen>
+    <dimen name="card_stroke_width">1dp</dimen>
+    <dimen name="appbar_elevation">0dp</dimen>
+    <dimen name="icon_size_small">18dp</dimen>
+    <dimen name="icon_size_medium">24dp</dimen>
+    <dimen name="icon_size_large">32dp</dimen>
+    <dimen name="icon_size_xlarge">64dp</dimen>
+    <dimen name="pinned_note_card_width">208dp</dimen>
+</resources>
