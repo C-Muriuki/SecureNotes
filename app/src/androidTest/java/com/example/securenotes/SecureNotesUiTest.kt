@@ -71,96 +71,104 @@ class SecureNotesUiTest {
 
     @Test
     fun loginAndRegistrationFormsRejectInvalidInput() {
-        onView(withId(R.id.btnLogin)).perform(click())
-        onView(withId(R.id.etEmail)).check(matches(isDisplayed()))
+        onViewRoot(withId(R.id.btnLogin)).perform(click())
+        onViewRoot(withId(R.id.etEmail)).check(matches(isDisplayed()))
 
-        onView(withId(R.id.btnRegisterLink)).perform(click())
-        onView(withId(R.id.btnRegisterSubmit)).perform(click())
-        onView(withId(R.id.etRegFullName)).check(matches(isDisplayed()))
+        onViewRoot(withId(R.id.btnRegisterLink)).perform(click())
+        onViewRoot(withId(R.id.btnRegisterSubmit)).perform(click())
+        onViewRoot(withId(R.id.etRegFullName)).check(matches(isDisplayed()))
 
-        onView(withId(R.id.etRegFullName)).perform(replaceText("Test User"))
-        onView(withId(R.id.etRegEmail)).perform(replaceText("not-an-email"))
-        onView(withId(R.id.etRegPassword)).perform(replaceText("weak"))
-        onView(withId(R.id.etConfirmPassword)).perform(replaceText("different"))
-        onView(withId(R.id.btnRegisterSubmit)).perform(click())
-        onView(withId(R.id.etRegEmail)).check(matches(isDisplayed()))
-        onView(withId(R.id.tvRegisterHeader)).check(matches(isDisplayed()))
+        onViewRoot(withId(R.id.etRegFullName)).perform(replaceText("Test User"))
+        onViewRoot(withId(R.id.etRegEmail)).perform(replaceText("not-an-email"))
+        onViewRoot(withId(R.id.etRegPassword)).perform(replaceText("weak"))
+        onViewRoot(withId(R.id.etConfirmPassword)).perform(replaceText("different"))
+        onViewRoot(withId(R.id.btnRegisterSubmit)).perform(click())
+        onViewRoot(withId(R.id.etRegEmail)).check(matches(isDisplayed()))
+        onViewRoot(withId(R.id.tvRegisterHeader)).check(matches(isDisplayed()))
     }
 
     @Test
     fun registerCreateEditPinSearchDeleteLogoutAndLoginJourney() {
-        onView(withId(R.id.btnRegisterLink)).perform(click())
-        onView(withId(R.id.etRegFullName)).perform(replaceText("QA User"))
-        onView(withId(R.id.etRegEmail)).perform(replaceText(email))
-        onView(withId(R.id.etRegPassword)).perform(replaceText(password))
-        onView(withId(R.id.etConfirmPassword)).perform(replaceText(password), closeSoftKeyboard())
-        onView(withId(R.id.btnRegisterSubmit)).perform(click())
+        onViewRoot(withId(R.id.btnRegisterLink)).perform(click())
+        onViewRoot(withId(R.id.etRegFullName)).perform(replaceText("QA User"))
+        onViewRoot(withId(R.id.etRegEmail)).perform(replaceText(email))
+        onViewRoot(withId(R.id.etRegPassword)).perform(replaceText(password))
+        onViewRoot(withId(R.id.etConfirmPassword)).perform(replaceText(password), closeSoftKeyboard())
+        onViewRoot(withId(R.id.btnRegisterSubmit)).perform(click())
         waitForView(R.id.fabCreateNote)
 
-        onView(withId(R.id.fabCreateNote)).perform(click())
-        onView(withId(R.id.etNoteTitle)).perform(replaceText("QA original"))
-        onView(withId(R.id.etNoteContent)).perform(replaceText("Private QA search text"), closeSoftKeyboard())
-        onView(withId(R.id.btnSaveNote)).perform(click())
+        onViewRoot(withId(R.id.fabCreateNote)).perform(click())
+        onViewRoot(withId(R.id.etNoteTitle)).perform(replaceText("QA original"))
+        onViewRoot(withId(R.id.etNoteContent)).perform(replaceText("Private QA search text"), closeSoftKeyboard())
+        onViewRoot(withId(R.id.btnSaveNote)).perform(click())
         waitForText("QA original")
 
-        onView(withId(R.id.ivPinIndicator)).perform(click())
+        onViewRoot(withId(R.id.ivPinIndicator)).perform(click())
         waitForView(R.id.tvPinnedTitle)
-        onView(withId(R.id.tvPinnedTitle)).perform(click())
+        onViewRoot(withId(R.id.tvPinnedTitle)).perform(click())
         waitForView(R.id.btnDetailPin)
-        onView(withId(R.id.btnDetailPin)).perform(click())
-        onView(withId(R.id.btnDetailPin)).check(matches(withContentDescription(R.string.action_pin_note)))
-        onView(withId(R.id.btnDetailPin)).perform(click())
-        onView(withId(R.id.btnDetailPin)).check(matches(withContentDescription(R.string.action_unpin_note)))
-        onView(withId(R.id.btnDetailEdit)).perform(click())
+        onViewRoot(withId(R.id.btnDetailPin)).perform(click())
+        onViewRoot(withId(R.id.btnDetailPin)).check(matches(withContentDescription(R.string.action_pin_note)))
+        onViewRoot(withId(R.id.btnDetailPin)).perform(click())
+        onViewRoot(withId(R.id.btnDetailPin)).check(matches(withContentDescription(R.string.action_unpin_note)))
+        onViewRoot(withId(R.id.btnDetailEdit)).perform(click())
         waitForText("Private QA search text")
-        onView(withId(R.id.etNoteTitle)).perform(replaceText("QA edited"))
-        onView(withId(R.id.btnSaveNote)).perform(click())
+        onViewRoot(withId(R.id.etNoteTitle)).perform(replaceText("QA edited"))
+        onViewRoot(withId(R.id.btnSaveNote)).perform(click())
         waitForText("QA edited")
 
-        onView(withId(R.id.bottomNav)).perform(click())
-        onView(withId(R.id.nav_search)).perform(click())
-        onView(withId(R.id.etSearchQuery)).perform(replaceText("QA edited"), closeSoftKeyboard())
+        onViewRoot(withId(R.id.cardSearchEntry)).perform(click())
+        onViewRoot(withId(R.id.etSearchQuery)).perform(replaceText("QA edited"), closeSoftKeyboard())
         waitForText("QA edited")
-        onView(withId(R.id.btnClearSearch)).check(matches(isDisplayed())).perform(click())
-        onView(withId(R.id.etSearchQuery)).check(matches(withText("")))
+        onViewRoot(withId(R.id.btnClearSearch)).check(matches(isDisplayed())).perform(click())
+        onViewRoot(withId(R.id.etSearchQuery)).check(matches(withText("")))
 
-        onView(withText("QA edited")).perform(click())
+        onViewRoot(withText("QA edited")).perform(click())
         waitForView(R.id.btnDetailDelete)
-        onView(withId(R.id.btnDetailDelete)).perform(click())
-        onView(withText(R.string.action_delete)).perform(click())
+        onViewRoot(withId(R.id.btnDetailDelete)).perform(click())
+        onViewRoot(withText(R.string.action_delete)).perform(click())
         waitForView(R.id.fabCreateNote)
-        onView(withText("QA edited")).check(matches(not(isDisplayed())))
+        onViewRoot(withText("QA edited")).check(matches(not(isDisplayed())))
 
-        onView(withId(R.id.btnProfile)).perform(click())
-        onView(withId(R.id.btnLogout)).perform(click())
+        onViewRoot(withId(R.id.btnProfile)).perform(click())
+        onViewRoot(withId(R.id.btnLogout)).perform(click())
         waitForView(R.id.btnLogin)
-        onView(withId(R.id.etEmail)).perform(replaceText(email))
-        onView(withId(R.id.etPassword)).perform(replaceText(password), closeSoftKeyboard())
-        onView(withId(R.id.btnLogin)).perform(click())
+        onViewRoot(withId(R.id.etEmail)).perform(replaceText(email))
+        onViewRoot(withId(R.id.etPassword)).perform(replaceText(password), closeSoftKeyboard())
+        onViewRoot(withId(R.id.btnLogin)).perform(click())
         waitForView(R.id.fabCreateNote)
-        onView(withId(R.id.tvUserGreeting)).check(matches(isDisplayed()))
+        onViewRoot(withId(R.id.tvUserGreeting)).check(matches(isDisplayed()))
 
-        onView(withId(R.id.bottomNav)).perform(click())
-        onView(withId(R.id.nav_settings)).perform(click())
+        onViewRoot(withId(R.id.btnProfile)).perform(click())
+        onViewRoot(withId(R.id.cardSettingsShortcut)).perform(click())
         waitForView(R.id.rgThemeMode)
-        onView(withId(R.id.rbThemeDark)).perform(click())
-        onView(withId(R.id.rbThemeDark)).check(matches(isDisplayed()))
+        onViewRoot(withId(R.id.rbThemeDark)).perform(click())
+        onViewRoot(withId(R.id.rbThemeDark)).check(matches(isDisplayed()))
     }
 
     /**
      * Waits for a real UI condition instead of assuming a fixed worker/animation duration.
      * The timeout bounds failures so a broken navigation or background operation is reported.
      */
+    private fun onViewRoot(matcher: org.hamcrest.Matcher<android.view.View>): androidx.test.espresso.ViewInteraction =
+        onView(matcher).inRoot(
+            org.hamcrest.Matchers.anyOf(
+                androidx.test.espresso.matcher.RootMatchers.isFocusable(),
+                androidx.test.espresso.matcher.RootMatchers.isPlatformPopup(),
+                androidx.test.espresso.matcher.RootMatchers.isDialog()
+            )
+        )
+
     private fun waitForView(viewId: Int, timeoutMs: Long = 10_000) {
         waitUntil(timeoutMs) {
-            onView(withId(viewId)).check(matches(isDisplayed()))
+            onViewRoot(withId(viewId)).check(matches(isDisplayed()))
             true
         }
     }
 
     private fun waitForText(text: String, timeoutMs: Long = 10_000) {
         waitUntil(timeoutMs) {
-            onView(withText(text)).check(matches(isDisplayed()))
+            onViewRoot(withText(text)).check(matches(isDisplayed()))
             true
         }
     }

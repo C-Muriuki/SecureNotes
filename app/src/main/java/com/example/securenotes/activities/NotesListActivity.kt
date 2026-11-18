@@ -68,9 +68,8 @@ class NotesListActivity : BaseActivity() {
         binding.bottomNavNotes.selectedItemId = R.id.nav_notes
         binding.bottomNavNotes.setOnItemSelectedListener { item ->
             when (item.itemId) {
-                R.id.nav_home -> { navigateToTab(DashboardActivity::class.java); true }
-                R.id.nav_search -> { navigateToTab(SearchActivity::class.java); true }
-                R.id.nav_settings -> { navigateToTab(SettingsActivity::class.java); true }
+                R.id.nav_notes -> true
+                R.id.nav_account -> { navigateToTab(AccountActivity::class.java); true }
                 else -> true
             }
         }

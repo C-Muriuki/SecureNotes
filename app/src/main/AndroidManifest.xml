@@ -77,6 +77,21 @@
             android:windowSoftInputMode="adjustResize" />
 
         <activity
+            android:name=".activities.RediscoverActivity"
+            android:exported="false"
+            android:windowSoftInputMode="adjustResize" />
+
+        <activity
+            android:name=".activities.GuidedThinkingActivity"
+            android:exported="false"
+            android:windowSoftInputMode="adjustResize" />
+
+        <activity
+            android:name=".activities.GuidedThinkingSessionActivity"
+            android:exported="false"
+            android:windowSoftInputMode="adjustResize" />
+
+        <activity
             android:name=".activities.SearchActivity"
             android:exported="false"
             android:windowSoftInputMode="adjustResize" />

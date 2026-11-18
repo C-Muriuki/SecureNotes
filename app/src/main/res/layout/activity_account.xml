@@ -44,7 +44,7 @@
         android:layout_height="0dp"
         android:fillViewport="true"
         android:padding="@dimen/spacing_large"
-        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintBottom_toTopOf="@+id/bottomNavAccount"
         app:layout_constraintTop_toBottomOf="@+id/toolbarAccount">
 
         <LinearLayout
@@ -93,6 +93,15 @@
                         android:text="@string/account_val_user_id"
                         android:textColor="@color/colorTextSecondary"
                         android:textSize="@dimen/text_size_body_secondary" />
+
+                    <com.google.android.material.button.MaterialButton
+                        android:id="@+id/btnEditProfile"
+                        style="@style/Widget.MaterialComponents.Button.OutlinedButton"
+                        android:layout_width="wrap_content"
+                        android:layout_height="@dimen/min_touch_target_size"
+                        android:layout_marginTop="@dimen/spacing_medium"
+                        android:text="@string/action_edit_profile"
+                        app:strokeColor="@color/colorHighlight" />
 
                 </LinearLayout>
 
@@ -195,6 +204,55 @@
 
             </com.google.android.material.card.MaterialCardView>
 
+            <!-- Settings & Preferences Shortcut Card -->
+            <com.google.android.material.card.MaterialCardView
+                android:id="@+id/cardSettingsShortcut"
+                style="@style/Widget.SecureNotes.CardView"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/spacing_large"
+                android:clickable="true"
+                android:focusable="true">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center_vertical"
+                    android:orientation="horizontal"
+                    android:padding="@dimen/spacing_large">
+
+                    <ImageView
+                        android:layout_width="@dimen/icon_size_medium"
+                        android:layout_height="@dimen/icon_size_medium"
+                        android:contentDescription="@string/title_settings"
+                        android:src="@drawable/ic_settings"
+                        app:tint="@color/colorAccentPrimary" />
+
+                    <LinearLayout
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="@dimen/spacing_medium"
+                        android:layout_weight="1"
+                        android:orientation="vertical">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="@string/title_settings"
+                            android:textColor="@color/colorTextPrimary"
+                            android:textSize="@dimen/text_size_subheading"
+                            android:textStyle="bold" />
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="@string/setting_theme_summary"
+                            android:textColor="@color/colorTextSecondary"
+                            android:textSize="@dimen/text_size_caption" />
+                    </LinearLayout>
+                </LinearLayout>
+            </com.google.android.material.card.MaterialCardView>
+
             <!-- Logout / Lock Vault Button -->
             <com.google.android.material.button.MaterialButton
                 android:id="@+id/btnLogout"
@@ -209,5 +267,17 @@
         </LinearLayout>
 
     </ScrollView>
+
+    <!-- Bottom Navigation Bar -->
+    <com.google.android.material.bottomnavigation.BottomNavigationView
+        android:id="@+id/bottomNavAccount"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/colorCardSurface"
+        app:itemIconTint="@color/bottom_nav_item_tint"
+        app:itemTextColor="@color/bottom_nav_item_tint"
+        app:itemBackground="@drawable/bottom_nav_item_background"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:menu="@menu/bottom_nav_menu" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

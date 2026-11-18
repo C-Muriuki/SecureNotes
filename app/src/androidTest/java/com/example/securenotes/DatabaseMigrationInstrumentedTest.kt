@@ -48,10 +48,10 @@ class DatabaseMigrationInstrumentedTest {
 
         DatabaseHelper(context, name).use { helper ->
             val db = helper.writableDatabase
-            assertEquals(4, db.version)
+            assertEquals(DatabaseContract.DATABASE_VERSION, db.version)
             assertSnapshotEquals(before, snapshot(db))
             assertAddedColumnsHaveSafeDefaults(db)
-            assertV4ObjectsExist(db)
+            assertV6ObjectsExist(db)
             assertEquals(1, countNotes(db, FIXTURE_OWNER_ONE, true))
             assertEquals(1, countNotes(db, FIXTURE_OWNER_ONE, false))
             assertEquals(1, countNotes(db, FIXTURE_OWNER_TWO, true))
@@ -66,7 +66,53 @@ class DatabaseMigrationInstrumentedTest {
         }
 
         DatabaseHelper(context, name).use { reopened ->
-            assertEquals("Reopening must not rerun or damage the migration", 4, reopened.readableDatabase.version)
+            assertEquals("Reopening must not rerun or damage the migration", DatabaseContract.DATABASE_VERSION, reopened.readableDatabase.version)
+            assertSnapshotEquals(before, snapshot(reopened.readableDatabase))
+        }
+    }
+
+    @Test
+    fun representativeVersion4FixtureMigratesToVersion6AndPreservesExistingRows() {
+        val name = disposableName("fixture_v4")
+        createVersion4Fixture(name)
+        val before = openRaw(name).use(::snapshot)
+
+        DatabaseHelper(context, name).use { helper ->
+            val db = helper.writableDatabase
+            assertEquals(DatabaseContract.DATABASE_VERSION, db.version)
+            assertSnapshotEquals(before, snapshot(db))
+            assertV6ObjectsExist(db)
+            assertEquals(1, countNotes(db, FIXTURE_OWNER_ONE, true))
+            assertEquals(1, countNotes(db, FIXTURE_OWNER_ONE, false))
+            assertEquals(1, countNotes(db, FIXTURE_OWNER_TWO, true))
+            assertEquals(0, db.rawQuery("PRAGMA foreign_key_check", null).use { it.count })
+        }
+
+        DatabaseHelper(context, name).use { reopened ->
+            assertEquals("Reopening must not rerun or damage the v6 migration", DatabaseContract.DATABASE_VERSION, reopened.readableDatabase.version)
+            assertSnapshotEquals(before, snapshot(reopened.readableDatabase))
+        }
+    }
+
+    @Test
+    fun representativeVersion5FixtureMigratesToVersion6AndPreservesExistingRows() {
+        val name = disposableName("fixture_v5")
+        createVersion5Fixture(name)
+        val before = openRaw(name).use(::snapshot)
+
+        DatabaseHelper(context, name).use { helper ->
+            val db = helper.writableDatabase
+            assertEquals(DatabaseContract.DATABASE_VERSION, db.version)
+            assertSnapshotEquals(before, snapshot(db))
+            assertV6ObjectsExist(db)
+            assertEquals(1, countNotes(db, FIXTURE_OWNER_ONE, true))
+            assertEquals(1, countNotes(db, FIXTURE_OWNER_ONE, false))
+            assertEquals(1, countNotes(db, FIXTURE_OWNER_TWO, true))
+            assertEquals(0, db.rawQuery("PRAGMA foreign_key_check", null).use { it.count })
+        }
+
+        DatabaseHelper(context, name).use { reopened ->
+            assertEquals("Reopening must not rerun or damage the v6 migration", DatabaseContract.DATABASE_VERSION, reopened.readableDatabase.version)
             assertSnapshotEquals(before, snapshot(reopened.readableDatabase))
         }
     }
@@ -87,10 +133,10 @@ class DatabaseMigrationInstrumentedTest {
 
         DatabaseHelper(context, name).use { helper ->
             val db = helper.writableDatabase
-            assertEquals(4, db.version)
+            assertEquals(DatabaseContract.DATABASE_VERSION, db.version)
             assertSnapshotEquals(before, snapshot(db))
             assertAddedColumnsHaveSafeDefaults(db)
-            assertV4ObjectsExist(db)
+            assertV6ObjectsExist(db)
             assertEquals(2, rowCount(db, DatabaseContract.UserTable.TABLE_NAME))
             assertEquals(3, rowCount(db, DatabaseContract.NoteTable.TABLE_NAME))
             assertEquals(0, db.rawQuery("PRAGMA foreign_key_check", null).use { it.count })
@@ -135,7 +181,7 @@ class DatabaseMigrationInstrumentedTest {
         }
 
         DatabaseHelper(context, name).use { reopened ->
-            assertEquals(4, reopened.readableDatabase.version)
+            assertEquals(DatabaseContract.DATABASE_VERSION, reopened.readableDatabase.version)
             assertSnapshotEquals(before, snapshot(reopened.readableDatabase))
         }
     }
@@ -202,10 +248,10 @@ class DatabaseMigrationInstrumentedTest {
         sourceFile.copyTo(context.getDatabasePath(copiedName), overwrite = true)
         DatabaseHelper(context, copiedName).use { helper ->
             val migrated = helper.writableDatabase
-            assertEquals(4, migrated.version)
+            assertEquals(DatabaseContract.DATABASE_VERSION, migrated.version)
             assertSnapshotEquals(originalSnapshot, snapshot(migrated))
             assertAddedColumnsHaveSafeDefaults(migrated)
-            assertV4ObjectsExist(migrated)
+            assertV6ObjectsExist(migrated)
             assertEquals(0, migrated.rawQuery("PRAGMA foreign_key_check", null).use { it.count })
         }
 
@@ -263,7 +309,7 @@ class DatabaseMigrationInstrumentedTest {
         sourceFile.copyTo(context.getDatabasePath(copiedName), overwrite = true)
         DatabaseHelper(context, copiedName).use { helper ->
             val db = helper.readableDatabase
-            assertEquals(4, db.version)
+            assertEquals(DatabaseContract.DATABASE_VERSION, db.version)
             assertSnapshotEquals(sourceSnapshot, snapshot(db))
             val manager = EncryptionManager()
             db.query(
@@ -334,9 +380,9 @@ class DatabaseMigrationInstrumentedTest {
         }
 
         DatabaseHelper(context, name).use { retry ->
-            assertEquals(4, retry.writableDatabase.version)
+            assertEquals(DatabaseContract.DATABASE_VERSION, retry.writableDatabase.version)
             assertAddedColumnsHaveSafeDefaults(retry.readableDatabase)
-            assertV4ObjectsExist(retry.readableDatabase)
+            assertV6ObjectsExist(retry.readableDatabase)
             assertSnapshotEquals(before, snapshot(retry.readableDatabase))
         }
     }
@@ -554,6 +600,60 @@ class DatabaseMigrationInstrumentedTest {
         }
     }
 
+    private fun createVersion4Fixture(name: String) {
+        val file = context.getDatabasePath(name)
+        file.parentFile?.mkdirs()
+        file.delete()
+        val db = SQLiteDatabase.openOrCreateDatabase(file.absolutePath, null)
+        try {
+            db.setForeignKeyConstraintsEnabled(true)
+            db.execSQL(DatabaseContract.UserTable.CREATE_TABLE)
+            db.execSQL(
+                """CREATE TABLE notes (
+                    note_id INTEGER PRIMARY KEY AUTOINCREMENT,
+                    user_id INTEGER NOT NULL,
+                    encrypted_title TEXT NOT NULL,
+                    title_iv TEXT NOT NULL,
+                    encrypted_content TEXT NOT NULL,
+                    content_iv TEXT NOT NULL,
+                    created_at INTEGER NOT NULL,
+                    updated_at INTEGER NOT NULL,
+                    is_pinned INTEGER NOT NULL DEFAULT 0,
+                    is_idea INTEGER NOT NULL DEFAULT 1 CHECK (is_idea IN (0, 1)),
+                    idea_stage INTEGER NOT NULL DEFAULT 0 CHECK (idea_stage BETWEEN 0 AND 3),
+                    last_opened_at INTEGER,
+                    FOREIGN KEY (user_id) REFERENCES users(user_id) ON DELETE CASCADE
+                )"""
+            )
+            db.execSQL("CREATE UNIQUE INDEX ${DatabaseContract.Index.NOTES_OWNER_NOTE} ON notes(user_id, note_id)")
+            db.execSQL(DatabaseContract.NoteConnectionTable.CREATE_TABLE)
+            db.execSQL(DatabaseContract.NoteReviewQueue.CREATE_TABLE)
+            db.execSQL("CREATE INDEX ${DatabaseContract.Index.NOTES_OWNER_IDEA_STAGE} ON notes(user_id, is_idea, idea_stage)")
+            db.execSQL("CREATE INDEX ${DatabaseContract.Index.CONNECTIONS_OWNER_TARGET} ON note_connections(owner_user_id, target_note_id)")
+            db.execSQL("CREATE INDEX ${DatabaseContract.Index.REVIEW_OWNER_STATUS_DUE} ON note_review_queue(owner_user_id, review_status, due_at)")
+            db.insertOrThrow(DatabaseContract.UserTable.TABLE_NAME, null, userValues(FIXTURE_OWNER_ONE, "first"))
+            db.insertOrThrow(DatabaseContract.UserTable.TABLE_NAME, null, userValues(FIXTURE_OWNER_TWO, "second"))
+            val v4NoteOne = noteValues(101, FIXTURE_OWNER_ONE, true).apply {
+                put(DatabaseContract.NoteTable.COLUMN_IS_IDEA, 1)
+                put(DatabaseContract.NoteTable.COLUMN_IDEA_STAGE, 0)
+            }
+            val v4NoteTwo = noteValues(102, FIXTURE_OWNER_ONE, false).apply {
+                put(DatabaseContract.NoteTable.COLUMN_IS_IDEA, 1)
+                put(DatabaseContract.NoteTable.COLUMN_IDEA_STAGE, 1)
+            }
+            val v4NoteThree = noteValues(202, FIXTURE_OWNER_TWO, true).apply {
+                put(DatabaseContract.NoteTable.COLUMN_IS_IDEA, 1)
+                put(DatabaseContract.NoteTable.COLUMN_IDEA_STAGE, 2)
+            }
+            db.insertOrThrow(DatabaseContract.NoteTable.TABLE_NAME, null, v4NoteOne)
+            db.insertOrThrow(DatabaseContract.NoteTable.TABLE_NAME, null, v4NoteTwo)
+            db.insertOrThrow(DatabaseContract.NoteTable.TABLE_NAME, null, v4NoteThree)
+            db.version = 4
+        } finally {
+            db.close()
+        }
+    }
+
     private fun assertV4ObjectsExist(db: SQLiteDatabase) {
         assertTrue(hasColumn(db, DatabaseContract.NoteTable.TABLE_NAME, DatabaseContract.NoteTable.COLUMN_IS_IDEA))
         assertTrue(hasColumn(db, DatabaseContract.NoteTable.TABLE_NAME, DatabaseContract.NoteTable.COLUMN_IDEA_STAGE))
@@ -567,6 +667,80 @@ class DatabaseMigrationInstrumentedTest {
             DatabaseContract.Index.NOTES_OWNER_IDEA_STAGE,
             DatabaseContract.Index.CONNECTIONS_OWNER_TARGET,
             DatabaseContract.Index.REVIEW_OWNER_STATUS_DUE
+        ).forEach { assertTrue("Missing index $it", indexExists(db, it)) }
+    }
+
+    private fun createVersion5Fixture(name: String) {
+        val file = context.getDatabasePath(name)
+        file.parentFile?.mkdirs()
+        file.delete()
+        val db = SQLiteDatabase.openOrCreateDatabase(file.absolutePath, null)
+        try {
+            db.setForeignKeyConstraintsEnabled(true)
+            db.execSQL(DatabaseContract.UserTable.CREATE_TABLE)
+            db.execSQL(
+                """CREATE TABLE notes (
+                    note_id INTEGER PRIMARY KEY AUTOINCREMENT,
+                    user_id INTEGER NOT NULL,
+                    encrypted_title TEXT NOT NULL,
+                    title_iv TEXT NOT NULL,
+                    encrypted_content TEXT NOT NULL,
+                    content_iv TEXT NOT NULL,
+                    created_at INTEGER NOT NULL,
+                    updated_at INTEGER NOT NULL,
+                    is_pinned INTEGER NOT NULL DEFAULT 0,
+                    is_idea INTEGER NOT NULL DEFAULT 1 CHECK (is_idea IN (0, 1)),
+                    idea_stage INTEGER NOT NULL DEFAULT 0 CHECK (idea_stage BETWEEN 0 AND 3),
+                    last_opened_at INTEGER,
+                    FOREIGN KEY (user_id) REFERENCES users(user_id) ON DELETE CASCADE
+                )"""
+            )
+            db.execSQL("CREATE UNIQUE INDEX ${DatabaseContract.Index.NOTES_OWNER_NOTE} ON notes(user_id, note_id)")
+            db.execSQL(DatabaseContract.NoteConnectionTable.CREATE_TABLE)
+            db.execSQL(DatabaseContract.NoteReviewQueue.CREATE_TABLE)
+            db.execSQL(DatabaseContract.IdeaStageHistoryTable.CREATE_TABLE)
+            db.execSQL("CREATE INDEX ${DatabaseContract.Index.NOTES_OWNER_IDEA_STAGE} ON notes(user_id, is_idea, idea_stage)")
+            db.execSQL("CREATE INDEX ${DatabaseContract.Index.CONNECTIONS_OWNER_TARGET} ON note_connections(owner_user_id, target_note_id)")
+            db.execSQL("CREATE INDEX ${DatabaseContract.Index.REVIEW_OWNER_STATUS_DUE} ON note_review_queue(owner_user_id, review_status, due_at)")
+            db.execSQL("CREATE INDEX ${DatabaseContract.Index.STAGE_HISTORY_OWNER_NOTE} ON idea_stage_history(owner_user_id, note_id)")
+            db.insertOrThrow(DatabaseContract.UserTable.TABLE_NAME, null, userValues(FIXTURE_OWNER_ONE, "first"))
+            db.insertOrThrow(DatabaseContract.UserTable.TABLE_NAME, null, userValues(FIXTURE_OWNER_TWO, "second"))
+            val v5NoteOne = noteValues(101, FIXTURE_OWNER_ONE, true).apply {
+                put(DatabaseContract.NoteTable.COLUMN_IS_IDEA, 1)
+                put(DatabaseContract.NoteTable.COLUMN_IDEA_STAGE, 0)
+            }
+            val v5NoteTwo = noteValues(102, FIXTURE_OWNER_ONE, false).apply {
+                put(DatabaseContract.NoteTable.COLUMN_IS_IDEA, 1)
+                put(DatabaseContract.NoteTable.COLUMN_IDEA_STAGE, 1)
+            }
+            val v5NoteThree = noteValues(202, FIXTURE_OWNER_TWO, true).apply {
+                put(DatabaseContract.NoteTable.COLUMN_IS_IDEA, 1)
+                put(DatabaseContract.NoteTable.COLUMN_IDEA_STAGE, 2)
+            }
+            db.insertOrThrow(DatabaseContract.NoteTable.TABLE_NAME, null, v5NoteOne)
+            db.insertOrThrow(DatabaseContract.NoteTable.TABLE_NAME, null, v5NoteTwo)
+            db.insertOrThrow(DatabaseContract.NoteTable.TABLE_NAME, null, v5NoteThree)
+            db.version = 5
+        } finally {
+            db.close()
+        }
+    }
+
+    private fun assertV5ObjectsExist(db: SQLiteDatabase) {
+        assertV4ObjectsExist(db)
+        assertTrue(tableExists(db, DatabaseContract.IdeaStageHistoryTable.TABLE_NAME))
+        assertTrue(indexExists(db, DatabaseContract.Index.STAGE_HISTORY_OWNER_NOTE))
+    }
+
+    private fun assertV6ObjectsExist(db: SQLiteDatabase) {
+        assertV5ObjectsExist(db)
+        listOf(
+            DatabaseContract.ThinkingSessionTable.TABLE_NAME,
+            DatabaseContract.ThinkingResponseTable.TABLE_NAME
+        ).forEach { assertTrue("Missing table $it", tableExists(db, it)) }
+        listOf(
+            DatabaseContract.Index.THINKING_SESSIONS_OWNER_STATUS,
+            DatabaseContract.Index.THINKING_RESPONSES_SESSION_STEP
         ).forEach { assertTrue("Missing index $it", indexExists(db, it)) }
     }
 

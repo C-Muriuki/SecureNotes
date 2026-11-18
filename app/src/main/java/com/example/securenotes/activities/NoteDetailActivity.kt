@@ -5,7 +5,6 @@ import android.content.ActivityNotFoundException
 import android.content.Intent
 import android.os.Bundle
 import android.view.View
-import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import androidx.core.content.ContextCompat
@@ -29,17 +28,13 @@ class NoteDetailActivity : BaseActivity() {
     private lateinit var repository: NoteRepository
     private lateinit var session: SessionManager
     private lateinit var relatedAdapter: ConnectedThoughtsAdapter
-    private lateinit var historyAdapter: IdeaStageHistoryAdapter
     private var noteId: Long = -1
     private var loadedNote: Note? = null
     private var loadTask: Future<*>? = null
     private var relatedTask: Future<*>? = null
-    private var historyTask: Future<*>? = null
     private var requestId = 0
     private var relatedRequestId = 0
-    private var historyRequestId = 0
     private var pinUpdateInProgress = false
-    private var stageUpdateInProgress = false
     private val removeUpdatesInFlight = mutableSetOf<Long>()
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -58,10 +53,6 @@ class NoteDetailActivity : BaseActivity() {
         binding.rvRelatedThoughts.layoutManager = LinearLayoutManager(this)
         binding.rvRelatedThoughts.adapter = relatedAdapter
 
-        historyAdapter = IdeaStageHistoryAdapter()
-        binding.rvIdeaHistory.layoutManager = LinearLayoutManager(this)
-        binding.rvIdeaHistory.adapter = historyAdapter
-
         binding.btnDetailBack.setOnClickListener { finish() }
         binding.btnDetailPin.isEnabled = false
         binding.btnDetailPin.setOnClickListener { togglePin() }
@@ -73,13 +64,18 @@ class NoteDetailActivity : BaseActivity() {
         }
         binding.btnDetailShare.isEnabled = false
         binding.btnDetailShare.setOnClickListener { shareSelectedNote() }
+        binding.btnDetailGuidedThinking.setOnClickListener {
+            startActivity(
+                Intent(this, GuidedThinkingActivity::class.java)
+                    .putExtra(NoteEditorActivity.EXTRA_NOTE_ID, noteId)
+            )
+        }
         binding.btnDetailDelete.setOnClickListener {
             AlertDialog.Builder(this).setMessage("Delete this note?")
                 .setNegativeButton(getString(R.string.action_cancel), null)
                 .setPositiveButton(getString(R.string.action_delete)) { _, _ -> deleteNote() }
                 .show()
         }
-        binding.btnChangeIdeaStage.setOnClickListener { showStagePickerDialog() }
         installPressFeedback(binding.btnAddThoughtConnection)
         binding.btnAddThoughtConnection.setOnClickListener { openConnectionPicker() }
         binding.tvRelatedThoughtsEmpty.setOnClickListener { openConnectionPicker() }
@@ -90,7 +86,6 @@ class NoteDetailActivity : BaseActivity() {
         if (::binding.isInitialized && noteId > 0) {
             loadNote()
             loadRelatedThoughts()
-            loadIdeaJourneyHistory()
         }
     }
 
@@ -102,7 +97,13 @@ class NoteDetailActivity : BaseActivity() {
         cancelIo(loadTask)
         binding.tvDetailNoteTitle.setText(R.string.state_loading_note)
         val userId = session.getCurrentUserId()
-        loadTask = runIo({ repository.getNote(userId, noteId) }) { result ->
+        loadTask = runIo({
+            val n = repository.getNote(userId, noteId)
+            if (n != null) {
+                repository.touchNoteOpened(userId, noteId)
+            }
+            n
+        }) { result ->
             if (request != requestId) return@runIo
             result.onSuccess { note ->
                 if (note == null) {
@@ -116,116 +117,10 @@ class NoteDetailActivity : BaseActivity() {
                 binding.tvDetailTimestamps.text = DateFormat.getDateTimeInstance().format(Date(note.updatedAt))
                 binding.btnDetailShare.isEnabled = true
                 renderPinControl(note.isPinned)
-                renderIdeaJourney(note)
             }.onFailure {
                 Toast.makeText(this, "This note could not be decrypted.", Toast.LENGTH_LONG).show()
                 finish()
             }
-        }
-    }
-
-    private fun renderIdeaJourney(note: Note) {
-        val stageName = getStageName(note.ideaStage)
-        binding.tvIdeaJourneyStageBadge.text = getString(R.string.idea_journey_current_stage, stageName)
-        updateStageIndicatorUI(note.ideaStage)
-    }
-
-    private fun updateStageIndicatorUI(activeStage: IdeaStage) {
-        val activeColor = ContextCompat.getColor(this, R.color.colorHighlight)
-        val inactiveColor = ContextCompat.getColor(this, R.color.colorNavSelected)
-        val activeTextColor = ContextCompat.getColor(this, R.color.colorOnPrimary)
-        val inactiveTextColor = ContextCompat.getColor(this, R.color.colorTextPrimary)
-
-        val indicators: List<Pair<IdeaStage, TextView>> = listOf(
-            IdeaStage.CAPTURED to binding.stageIndicatorCaptured,
-            IdeaStage.EXPLORING to binding.stageIndicatorExploring,
-            IdeaStage.DEVELOPING to binding.stageIndicatorDeveloping,
-            IdeaStage.COMPLETED to binding.stageIndicatorCompleted
-        )
-
-        indicators.forEach { (stage, view) ->
-            val isActive = stage == activeStage
-            view.setBackgroundColor(if (isActive) activeColor else inactiveColor)
-            view.setTextColor(if (isActive) activeTextColor else inactiveTextColor)
-        }
-    }
-
-    private fun showStagePickerDialog() {
-        val note = loadedNote ?: return
-        val stages = IdeaStage.entries.toTypedArray()
-        val stageNames = stages.map { getStageName(it) }.toTypedArray()
-        val currentSelection = stages.indexOf(note.ideaStage)
-
-        AlertDialog.Builder(this)
-            .setTitle(R.string.idea_journey_title)
-            .setSingleChoiceItems(stageNames, currentSelection) { dialog, which ->
-                dialog.dismiss()
-                val selectedStage = stages[which]
-                if (selectedStage != note.ideaStage) {
-                    changeIdeaStage(selectedStage)
-                }
-            }
-            .setNegativeButton(R.string.action_cancel, null)
-            .show()
-    }
-
-    private fun changeIdeaStage(newStage: IdeaStage) {
-        val note = loadedNote ?: return
-        val ownerId = session.getCurrentUserId()
-        if (ownerId <= 0 || stageUpdateInProgress) return
-        stageUpdateInProgress = true
-        binding.btnChangeIdeaStage.isEnabled = false
-        runIo({ repository.updateIdeaStage(ownerId, note.id, newStage) }) { result ->
-            stageUpdateInProgress = false
-            binding.btnChangeIdeaStage.isEnabled = true
-            result.onSuccess { updated ->
-                if (updated) {
-                    val updatedNote = note.copy(ideaStage = newStage, updatedAt = System.currentTimeMillis())
-                    loadedNote = updatedNote
-                    renderIdeaJourney(updatedNote)
-                    loadIdeaJourneyHistory()
-                    Toast.makeText(
-                        this,
-                        getString(R.string.idea_journey_stage_updated, getStageName(newStage)),
-                        Toast.LENGTH_SHORT
-                    ).show()
-                } else {
-                    Toast.makeText(this, R.string.idea_journey_update_failed, Toast.LENGTH_SHORT).show()
-                }
-            }.onFailure {
-                Toast.makeText(this, R.string.idea_journey_update_failed, Toast.LENGTH_SHORT).show()
-            }
-        }
-    }
-
-    private fun loadIdeaJourneyHistory() {
-        val request = ++historyRequestId
-        cancelIo(historyTask)
-        binding.progressIdeaHistory.visibility = View.VISIBLE
-        binding.tvIdeaHistoryEmpty.visibility = View.GONE
-        val userId = session.getCurrentUserId()
-        historyTask = runIo({ repository.getIdeaStageHistory(userId, noteId) }) { result ->
-            if (request != historyRequestId) return@runIo
-            binding.progressIdeaHistory.visibility = View.GONE
-            result.onSuccess { historyList ->
-                historyAdapter.submitList(historyList)
-                val empty = historyList.isEmpty()
-                binding.tvIdeaHistoryEmpty.visibility = if (empty) View.VISIBLE else View.GONE
-                binding.rvIdeaHistory.visibility = if (empty) View.GONE else View.VISIBLE
-            }.onFailure {
-                historyAdapter.submitList(emptyList())
-                binding.tvIdeaHistoryEmpty.visibility = View.VISIBLE
-                binding.rvIdeaHistory.visibility = View.GONE
-            }
-        }
-    }
-
-    private fun getStageName(stage: IdeaStage): String {
-        return when (stage) {
-            IdeaStage.CAPTURED -> getString(R.string.idea_stage_captured)
-            IdeaStage.EXPLORING -> getString(R.string.idea_stage_exploring)
-            IdeaStage.DEVELOPING -> getString(R.string.idea_stage_developing)
-            IdeaStage.COMPLETED -> getString(R.string.idea_stage_completed)
         }
     }
 

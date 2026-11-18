@@ -18,6 +18,7 @@ class DatabaseHelper(
         db.execSQL(DatabaseContract.NoteTable.CREATE_TABLE)
         createV4SupportingSchema(db)
         createV5SupportingSchema(db)
+        createV6SupportingSchema(db)
     }
 
     override fun onUpgrade(db: SQLiteDatabase, oldVersion: Int, newVersion: Int) {
@@ -29,15 +30,55 @@ class DatabaseHelper(
             db.execSQL(DatabaseContract.NoteTable.CREATE_TABLE)
             createV4SupportingSchema(db)
             createV5SupportingSchema(db)
+            createV6SupportingSchema(db)
             return
         }
 
-        if (oldVersion == 3) {
+        if (oldVersion <= 3) {
             migrateVersion3To4(db)
-            migrateVersion4To5(db)
-        } else if (oldVersion == 4 && newVersion >= 5) {
+        }
+        if (oldVersion <= 4) {
             migrateVersion4To5(db)
         }
+        if (oldVersion <= 5 && newVersion >= 6) {
+            migrateVersion5To6(db)
+        }
+        if (oldVersion <= 6 && newVersion >= 7) {
+            migrateVersion6To7(db)
+        }
+    }
+
+    private fun migrateVersion6To7(db: SQLiteDatabase) {
+        val userTable = DatabaseContract.UserTable.TABLE_NAME
+        val colUsername = DatabaseContract.UserTable.COLUMN_USERNAME
+        val colEmail = DatabaseContract.UserTable.COLUMN_EMAIL
+
+        var hasUsername = false
+        db.rawQuery("PRAGMA table_info($userTable)", null).use { cursor ->
+            val nameIdx = cursor.getColumnIndex("name")
+            while (cursor.moveToNext()) {
+                if (nameIdx >= 0 && cursor.getString(nameIdx).equals(colUsername, ignoreCase = true)) {
+                    hasUsername = true
+                    break
+                }
+            }
+        }
+
+        if (!hasUsername) {
+            db.execSQL(
+                "ALTER TABLE $userTable " +
+                    "ADD COLUMN $colUsername TEXT NOT NULL DEFAULT '' COLLATE NOCASE"
+            )
+        }
+
+        db.execSQL(
+            "UPDATE $userTable SET $colUsername = " +
+                "CASE WHEN INSTR($colEmail, '@') > 1 " +
+                "THEN LOWER(SUBSTR($colEmail, 1, INSTR($colEmail, '@') - 1)) " +
+                "ELSE 'user' END " +
+                "WHERE $colUsername = '' OR $colUsername IS NULL"
+        )
+        db.execSQL("CREATE UNIQUE INDEX IF NOT EXISTS idx_users_username ON $userTable($colUsername COLLATE NOCASE) WHERE $colUsername != ''")
     }
 
     /**
@@ -65,6 +106,10 @@ class DatabaseHelper(
 
     private fun migrateVersion4To5(db: SQLiteDatabase) {
         createV5SupportingSchema(db)
+    }
+
+    private fun migrateVersion5To6(db: SQLiteDatabase) {
+        createV6SupportingSchema(db)
     }
 
     private fun createV4SupportingSchema(db: SQLiteDatabase) {
@@ -109,6 +154,23 @@ class DatabaseHelper(
                 "ON ${DatabaseContract.IdeaStageHistoryTable.TABLE_NAME}(" +
                 "${DatabaseContract.IdeaStageHistoryTable.COLUMN_OWNER_ID}, " +
                 "${DatabaseContract.IdeaStageHistoryTable.COLUMN_NOTE_ID})"
+        )
+    }
+
+    private fun createV6SupportingSchema(db: SQLiteDatabase) {
+        db.execSQL(DatabaseContract.ThinkingSessionTable.CREATE_TABLE)
+        db.execSQL(DatabaseContract.ThinkingResponseTable.CREATE_TABLE)
+        db.execSQL(
+            "CREATE INDEX ${DatabaseContract.Index.THINKING_SESSIONS_OWNER_STATUS} " +
+                "ON ${DatabaseContract.ThinkingSessionTable.TABLE_NAME}(" +
+                "${DatabaseContract.ThinkingSessionTable.COLUMN_OWNER_ID}, " +
+                "${DatabaseContract.ThinkingSessionTable.COLUMN_STATUS})"
+        )
+        db.execSQL(
+            "CREATE INDEX ${DatabaseContract.Index.THINKING_RESPONSES_SESSION_STEP} " +
+                "ON ${DatabaseContract.ThinkingResponseTable.TABLE_NAME}(" +
+                "${DatabaseContract.ThinkingResponseTable.COLUMN_SESSION_ID}, " +
+                "${DatabaseContract.ThinkingResponseTable.COLUMN_STEP_ID})"
         )
     }
 

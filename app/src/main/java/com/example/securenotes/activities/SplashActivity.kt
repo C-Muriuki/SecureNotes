@@ -19,7 +19,22 @@ class SplashActivity : BaseActivity() {
         binding = ActivitySplashBinding.inflate(layoutInflater)
         setContentView(binding.root)
         setupEdgeToEdgeInsets(binding.mainSplash)
+        animateLogoEntrance()
         splashHandler.postDelayed(routeAfterSplash, SPLASH_DELAY_MS)
+    }
+
+    private fun animateLogoEntrance() {
+        if (!android.animation.ValueAnimator.areAnimatorsEnabled()) return
+        binding.ivSplashLogo.alpha = 0f
+        binding.ivSplashLogo.scaleX = 0.7f
+        binding.ivSplashLogo.scaleY = 0.7f
+        binding.ivSplashLogo.animate()
+            .alpha(1f)
+            .scaleX(1f)
+            .scaleY(1f)
+            .setDuration(600L)
+            .setInterpolator(android.view.animation.OvershootInterpolator(1.2f))
+            .start()
     }
 
     override fun onDestroy() {

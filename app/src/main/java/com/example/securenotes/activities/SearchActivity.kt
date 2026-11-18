@@ -61,12 +61,11 @@ class SearchActivity : BaseActivity() {
             }
             override fun afterTextChanged(s: Editable?) = Unit
         })
-        binding.bottomNavSearch.selectedItemId = R.id.nav_search
+        binding.bottomNavSearch.selectedItemId = R.id.nav_notes
         binding.bottomNavSearch.setOnItemSelectedListener { item ->
             when (item.itemId) {
-                R.id.nav_home -> { navigateToTab(DashboardActivity::class.java); true }
-                R.id.nav_notes -> { navigateToTab(NotesListActivity::class.java); true }
-                R.id.nav_settings -> { navigateToTab(SettingsActivity::class.java); true }
+                R.id.nav_notes -> { navigateToTab(DashboardActivity::class.java); true }
+                R.id.nav_account -> { navigateToTab(AccountActivity::class.java); true }
                 else -> true
             }
         }

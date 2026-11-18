@@ -18,6 +18,15 @@
         android:padding="@dimen/spacing_medium"
         app:layout_constraintTop_toTopOf="parent">
 
+        <ImageButton
+            android:id="@+id/btnSettingsBack"
+            android:layout_width="@dimen/min_touch_target_size"
+            android:layout_height="@dimen/min_touch_target_size"
+            android:background="?attr/selectableItemBackgroundBorderless"
+            android:contentDescription="@string/cd_back_button"
+            android:src="@drawable/ic_arrow_back"
+            app:tint="@color/colorTextPrimary" />
+
         <TextView
             android:layout_width="0dp"
             android:layout_height="wrap_content"
@@ -110,7 +119,7 @@
 
             </com.google.android.material.card.MaterialCardView>
 
-            <!-- Privacy & Security Link Section -->
+            <!-- Protection Level & Security Section -->
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -119,6 +128,49 @@
                 android:textColor="@color/colorAccentPrimary"
                 android:textSize="@dimen/text_size_subheading"
                 android:textStyle="bold" />
+
+            <com.google.android.material.card.MaterialCardView
+                style="@style/Widget.SecureNotes.CardView"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/spacing_small"
+                app:cardCornerRadius="@dimen/card_corner_radius"
+                app:cardElevation="@dimen/card_elevation">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:padding="@dimen/spacing_large">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/dashboard_stat_security"
+                        android:textColor="@color/colorTextSecondary"
+                        android:textSize="@dimen/text_size_caption" />
+
+                    <TextView
+                        android:id="@+id/tvProtectionLevelValue"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/spacing_xxsmall"
+                        android:text="@string/dashboard_stat_security_val"
+                        android:textColor="@color/colorHighlight"
+                        android:textSize="@dimen/text_size_subheading"
+                        android:textStyle="bold" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/spacing_small"
+                        android:text="@string/security_architecture_desc"
+                        android:textColor="@color/colorTextSecondary"
+                        android:textSize="@dimen/text_size_body_secondary" />
+
+                </LinearLayout>
+
+            </com.google.android.material.card.MaterialCardView>
 
             <com.google.android.material.card.MaterialCardView
                 android:id="@+id/cardPrivacyInfo"
@@ -172,6 +224,7 @@
 
             </com.google.android.material.card.MaterialCardView>
 
+            <!-- Data & Backup Section -->
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"

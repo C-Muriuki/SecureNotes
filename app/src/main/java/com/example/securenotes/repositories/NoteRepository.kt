@@ -196,6 +196,19 @@ class NoteRepository(
             null
         ).firstOrNull()
 
+    fun touchNoteOpened(userId: Long, noteId: Long): Boolean {
+        requireOwner(userId)
+        val values = ContentValues().apply {
+            put(DatabaseContract.NoteTable.COLUMN_LAST_OPENED_AT, System.currentTimeMillis())
+        }
+        return dbHelper.writableDatabase.update(
+            DatabaseContract.NoteTable.TABLE_NAME,
+            values,
+            "${DatabaseContract.NoteTable.COLUMN_ID} = ? AND ${DatabaseContract.NoteTable.COLUMN_USER_ID} = ?",
+            arrayOf(noteId.toString(), userId.toString())
+        ) == 1
+    }
+
     fun getNotes(
         userId: Long,
         search: String? = null,
@@ -453,7 +466,7 @@ class NoteRepository(
         requireOwner(userId)
         val cols = noteProjection()
         val result = mutableListOf<Note>()
-        dbHelper.readableDatabase.query(
+        dbHelper.writableDatabase.query(
             DatabaseContract.NoteTable.TABLE_NAME,
             cols,
             selection,
@@ -494,6 +507,7 @@ class NoteRepository(
         val isIdea = cursor.getInt(offset + 9) == 1
         val ideaStageInt = cursor.getInt(offset + 10)
         val lastOpened = if (cursor.isNull(offset + 11)) null else cursor.getLong(offset + 11)
+
         return Note(
             id = cursor.getLong(offset),
             userId = cursor.getLong(offset + 1),

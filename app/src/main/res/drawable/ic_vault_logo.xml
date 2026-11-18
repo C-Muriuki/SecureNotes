@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="128dp"
+    android:height="128dp"
+    android:viewportWidth="128"
+    android:viewportHeight="128">
+
+    <!-- Outer Rounded Shield Body - Action Blue (#2563EB) -->
+    <path
+        android:fillColor="#2563EB"
+        android:pathData="M64,12 C88,12 108,20 108,44 C108,76 80,108 64,116 C48,108 20,76 20,44 C20,20 40,12 64,12 Z" />
+
+    <!-- Inner Shield Accent Line - Deep Action Blue (#1D4ED8) -->
+    <path
+        android:fillColor="#1D4ED8"
+        android:pathData="M64,20 C82,20 98,27 98,47 C98,73 74,100 64,107 C54,100 30,73 30,47 C30,27 46,20 64,20 Z" />
+
+    <!-- Lock Shackle - White (#FFFFFF) -->
+    <path
+        android:fillColor="#FFFFFF"
+        android:pathData="M52,48 C52,41.37 57.37,36 64,36 C70.63,36 76,41.37 76,48 L76,56 L52,56 Z M44,56 L84,56 C86.2,56 88,57.8 88,60 L88,84 C88,86.2 86.2,88 84,88 L44,88 C41.8,88 40,86.2 40,84 L40,60 C40,57.8 41.8,56 44,56 Z" />
+
+    <!-- Keyhole Mint Accent - Mint (#2DD4BF) -->
+    <path
+        android:fillColor="#2DD4BF"
+        android:pathData="M64,65 C66.76,65 69,67.24 69,70 C69,71.86 67.98,73.49 66.5,74.34 L68,80 L60,80 L61.5,74.34 C60.02,73.49 59,71.86 59,70 C59,67.24 61.24,65 64,65 Z" />
+
+</vector>

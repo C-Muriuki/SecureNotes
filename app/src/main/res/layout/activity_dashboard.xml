@@ -235,17 +235,18 @@
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="@string/dashboard_stat_security"
+                            android:text="@string/dashboard_stat_pinned_notes"
                             android:textColor="@color/colorTextSecondary"
                             android:textSize="@dimen/text_size_caption" />
 
                         <TextView
+                            android:id="@+id/tvPinnedNotesCount"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_marginTop="@dimen/spacing_xsmall"
-                            android:text="@string/dashboard_stat_security_val"
+                            android:text="0"
                             android:textColor="@color/colorHighlight"
-                            android:textSize="@dimen/text_size_body_secondary"
+                            android:textSize="@dimen/text_size_subheading"
                             android:textStyle="bold" />
 
                     </LinearLayout>
@@ -254,176 +255,139 @@
 
             </LinearLayout>
 
-            <!-- Idea Journey Breakdown Section -->
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/spacing_large"
-                android:text="@string/dashboard_section_idea_journey"
-                android:textColor="@color/colorTextPrimary"
-                android:textSize="@dimen/text_size_subheading"
-                android:textStyle="bold" />
-
-            <LinearLayout
+            <!-- Rediscover Vault Section -->
+            <com.google.android.material.card.MaterialCardView
+                android:id="@+id/cardRediscoverVault"
+                style="@style/Widget.SecureNotes.CardView"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/spacing_small"
-                android:orientation="horizontal"
-                android:weightSum="4">
+                android:layout_marginTop="@dimen/spacing_large"
+                android:clickable="true"
+                android:focusable="true">
 
-                <com.google.android.material.card.MaterialCardView
-                    android:id="@+id/cardStageCaptured"
-                    style="@style/Widget.SecureNotes.CardView"
-                    android:layout_width="0dp"
+                <LinearLayout
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginEnd="2dp"
-                    android:layout_weight="1"
-                    android:clickable="true"
-                    android:focusable="true">
+                    android:orientation="vertical"
+                    android:padding="@dimen/spacing_large">
 
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:gravity="center"
-                        android:orientation="vertical"
-                        android:padding="@dimen/spacing_small">
+                        android:gravity="center_vertical"
+                        android:orientation="horizontal">
+
+                        <ImageView
+                            android:layout_width="@dimen/icon_size_medium"
+                            android:layout_height="@dimen/icon_size_medium"
+                            android:contentDescription="@string/rediscover_title"
+                            android:src="@drawable/ic_sparkles"
+                            app:tint="@color/colorHighlight" />
 
                         <TextView
-                            android:id="@+id/tvCountCaptured"
-                            android:layout_width="wrap_content"
+                            android:layout_width="0dp"
                             android:layout_height="wrap_content"
-                            android:text="0"
-                            android:textColor="@color/colorAccentPrimary"
+                            android:layout_marginStart="@dimen/spacing_small"
+                            android:layout_weight="1"
+                            android:text="@string/rediscover_dashboard_card_title"
+                            android:textColor="@color/colorTextPrimary"
                             android:textSize="@dimen/text_size_subheading"
                             android:textStyle="bold" />
 
                         <TextView
+                            android:id="@+id/tvRediscoverCountBadge"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:layout_marginTop="2dp"
-                            android:text="@string/dashboard_stat_captured"
-                            android:textColor="@color/colorTextSecondary"
-                            android:textSize="@dimen/text_size_caption" />
-
+                            android:background="@color/colorHighlight"
+                            android:paddingStart="@dimen/spacing_small"
+                            android:paddingTop="2dp"
+                            android:paddingEnd="@dimen/spacing_small"
+                            android:paddingBottom="2dp"
+                            android:text="0"
+                            android:textColor="@color/colorOnPrimary"
+                            android:textSize="@dimen/text_size_caption"
+                            android:textStyle="bold" />
                     </LinearLayout>
 
-                </com.google.android.material.card.MaterialCardView>
+                    <TextView
+                        android:id="@+id/tvRediscoverDesc"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/spacing_xsmall"
+                        android:text="@string/rediscover_subtitle"
+                        android:textColor="@color/colorTextSecondary"
+                        android:textSize="@dimen/text_size_body_secondary" />
 
-                <com.google.android.material.card.MaterialCardView
-                    android:id="@+id/cardStageExploring"
-                    style="@style/Widget.SecureNotes.CardView"
-                    android:layout_width="0dp"
+                    <com.google.android.material.button.MaterialButton
+                        android:id="@+id/btnOpenRediscover"
+                        style="@style/Widget.MaterialComponents.Button.OutlinedButton"
+                        android:layout_width="match_parent"
+                        android:layout_height="@dimen/min_touch_target_size"
+                        android:layout_marginTop="@dimen/spacing_medium"
+                        android:text="@string/rediscover_title"
+                        app:strokeColor="@color/colorHighlight" />
+                </LinearLayout>
+            </com.google.android.material.card.MaterialCardView>
+
+            <!-- Guided Thinking Section -->
+            <com.google.android.material.card.MaterialCardView
+                android:id="@+id/cardGuidedThinking"
+                style="@style/Widget.SecureNotes.CardView"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/spacing_large"
+                android:clickable="true"
+                android:focusable="true">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginHorizontal="2dp"
-                    android:layout_weight="1"
-                    android:clickable="true"
-                    android:focusable="true">
+                    android:orientation="vertical"
+                    android:padding="@dimen/spacing_large">
 
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:gravity="center"
-                        android:orientation="vertical"
-                        android:padding="@dimen/spacing_small">
+                        android:gravity="center_vertical"
+                        android:orientation="horizontal">
+
+                        <ImageView
+                            android:layout_width="@dimen/icon_size_medium"
+                            android:layout_height="@dimen/icon_size_medium"
+                            android:contentDescription="@string/guided_thinking_title"
+                            android:src="@drawable/ic_sparkles"
+                            app:tint="@color/colorHighlight" />
 
                         <TextView
-                            android:id="@+id/tvCountExploring"
-                            android:layout_width="wrap_content"
+                            android:layout_width="0dp"
                             android:layout_height="wrap_content"
-                            android:text="0"
-                            android:textColor="@color/colorAccentPrimary"
+                            android:layout_marginStart="@dimen/spacing_small"
+                            android:layout_weight="1"
+                            android:text="@string/guided_thinking_title"
+                            android:textColor="@color/colorTextPrimary"
                             android:textSize="@dimen/text_size_subheading"
                             android:textStyle="bold" />
 
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_marginTop="2dp"
-                            android:text="@string/dashboard_stat_exploring"
-                            android:textColor="@color/colorTextSecondary"
-                            android:textSize="@dimen/text_size_caption" />
-
                     </LinearLayout>
 
-                </com.google.android.material.card.MaterialCardView>
-
-                <com.google.android.material.card.MaterialCardView
-                    android:id="@+id/cardStageDeveloping"
-                    style="@style/Widget.SecureNotes.CardView"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_marginHorizontal="2dp"
-                    android:layout_weight="1"
-                    android:clickable="true"
-                    android:focusable="true">
-
-                    <LinearLayout
+                    <TextView
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:gravity="center"
-                        android:orientation="vertical"
-                        android:padding="@dimen/spacing_small">
+                        android:layout_marginTop="@dimen/spacing_xsmall"
+                        android:text="@string/guided_thinking_subtitle"
+                        android:textColor="@color/colorTextSecondary"
+                        android:textSize="@dimen/text_size_body_secondary" />
 
-                        <TextView
-                            android:id="@+id/tvCountDeveloping"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="0"
-                            android:textColor="@color/colorAccentPrimary"
-                            android:textSize="@dimen/text_size_subheading"
-                            android:textStyle="bold" />
-
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_marginTop="2dp"
-                            android:text="@string/dashboard_stat_developing"
-                            android:textColor="@color/colorTextSecondary"
-                            android:textSize="@dimen/text_size_caption" />
-
-                    </LinearLayout>
-
-                </com.google.android.material.card.MaterialCardView>
-
-                <com.google.android.material.card.MaterialCardView
-                    android:id="@+id/cardStageCompleted"
-                    style="@style/Widget.SecureNotes.CardView"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="2dp"
-                    android:layout_weight="1"
-                    android:clickable="true"
-                    android:focusable="true">
-
-                    <LinearLayout
+                    <com.google.android.material.button.MaterialButton
+                        android:id="@+id/btnOpenGuidedThinking"
+                        style="@style/Widget.MaterialComponents.Button.OutlinedButton"
                         android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:gravity="center"
-                        android:orientation="vertical"
-                        android:padding="@dimen/spacing_small">
-
-                        <TextView
-                            android:id="@+id/tvCountCompleted"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="0"
-                            android:textColor="@color/colorAccentPrimary"
-                            android:textSize="@dimen/text_size_subheading"
-                            android:textStyle="bold" />
-
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_marginTop="2dp"
-                            android:text="@string/dashboard_stat_completed"
-                            android:textColor="@color/colorTextSecondary"
-                            android:textSize="@dimen/text_size_caption" />
-
-                    </LinearLayout>
-
-                </com.google.android.material.card.MaterialCardView>
-
-            </LinearLayout>
+                        android:layout_height="@dimen/min_touch_target_size"
+                        android:layout_marginTop="@dimen/spacing_medium"
+                        android:text="@string/guided_thinking_title"
+                        app:strokeColor="@color/colorHighlight" />
+                </LinearLayout>
+            </com.google.android.material.card.MaterialCardView>
 
             <!-- Pinned Notes Section -->
             <TextView

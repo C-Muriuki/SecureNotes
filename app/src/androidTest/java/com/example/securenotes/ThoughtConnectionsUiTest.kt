@@ -108,34 +108,34 @@ class ThoughtConnectionsUiTest {
 
         launchDetail(sourceNoteId)
         waitUntilDisplayed(withId(R.id.tvRelatedThoughtsEmpty))
-        onView(withId(R.id.btnAddThoughtConnection)).perform(scrollTo(), click())
+        onViewRoot(withId(R.id.btnAddThoughtConnection)).perform(scrollTo(), click())
 
         waitUntilDisplayed(withId(R.id.etConnectionSearch))
-        onView(withId(R.id.etConnectionSearch)).perform(replaceText("Market"), closeSoftKeyboard())
+        onViewRoot(withId(R.id.etConnectionSearch)).perform(replaceText("Market"), closeSoftKeyboard())
         waitUntilDisplayed(withText("Market research"))
-        onView(withText("Meeting notes")).check(doesNotExist())
+        onViewRoot(withText("Meeting notes")).check(doesNotExist())
 
-        onView(withId(R.id.etConnectionSearch)).perform(replaceText("Meeting"), closeSoftKeyboard())
+        onViewRoot(withId(R.id.etConnectionSearch)).perform(replaceText("Meeting"), closeSoftKeyboard())
         waitUntilDisplayed(withText("Meeting notes"))
-        onView(withText("Market research")).check(doesNotExist())
+        onViewRoot(withText("Market research")).check(doesNotExist())
 
-        onView(withId(R.id.btnConnectCandidate)).perform(click())
+        onViewRoot(withId(R.id.btnConnectCandidate)).perform(click())
         waitUntilDisplayed(withText(R.string.thought_connections_confirm_title))
-        onView(withText(R.string.action_connect)).perform(click())
+        onViewRoot(withText(R.string.action_connect)).perform(click())
 
         waitUntilDisplayed(withText("Meeting notes"))
-        onView(withId(R.id.rvRelatedThoughts)).perform(scrollTo()).check(matches(isDisplayed()))
-        onView(withId(R.id.tvRelatedThoughtsEmpty)).check(matches(not(isDisplayed())))
+        onViewRoot(withId(R.id.rvRelatedThoughts)).perform(scrollTo()).check(matches(isDisplayed()))
+        onViewRoot(withId(R.id.tvRelatedThoughtsEmpty)).check(matches(not(isDisplayed())))
 
-        onView(withText("Meeting notes")).perform(scrollTo(), click())
+        onViewRoot(withText("Meeting notes")).perform(scrollTo(), click())
         waitUntilDisplayed(withText("Investor follow-up"))
         waitUntilDisplayed(withText(R.string.note_detail_related_thoughts))
 
-        onView(withId(R.id.btnDetailBack)).perform(click())
+        onViewRoot(withId(R.id.btnDetailBack)).perform(click())
         waitUntilDisplayed(withText("Meeting notes"))
-        onView(withId(R.id.btnRemoveThoughtConnection)).perform(scrollTo(), click())
+        onViewRoot(withId(R.id.btnRemoveThoughtConnection)).perform(scrollTo(), click())
         waitUntilDisplayed(withText(R.string.thought_connections_remove_title))
-        onView(withText(R.string.action_remove)).perform(click())
+        onViewRoot(withText(R.string.action_remove)).perform(click())
         waitUntilDisplayed(withId(R.id.tvRelatedThoughtsEmpty))
     }
 
@@ -143,10 +143,10 @@ class ThoughtConnectionsUiTest {
     fun pickerExcludesAlreadyConnectedNotes() {
         launchDetail(sourceNoteId)
         waitUntilDisplayed(withText("Market research"))
-        onView(withId(R.id.btnAddThoughtConnection)).perform(scrollTo(), click())
+        onViewRoot(withId(R.id.btnAddThoughtConnection)).perform(scrollTo(), click())
         waitUntilDisplayed(withId(R.id.etConnectionSearch))
         waitUntilDisplayed(withText("Meeting notes"))
-        onView(withText("Market research")).check(doesNotExist())
+        onViewRoot(withText("Market research")).check(doesNotExist())
     }
 
     @Test
@@ -154,9 +154,18 @@ class ThoughtConnectionsUiTest {
         ThemeUtils.setThemeMode(Constants.THEME_MODE_DARK)
         launchDetail(sourceNoteId)
         waitUntilDisplayed(withText("Market research"))
-        onView(withId(R.id.rvRelatedThoughts)).perform(scrollTo()).check(matches(isDisplayed()))
-        onView(withText(R.string.note_detail_related_thoughts)).perform(scrollTo()).check(matches(isDisplayed()))
+        onViewRoot(withId(R.id.rvRelatedThoughts)).perform(scrollTo()).check(matches(isDisplayed()))
+        onViewRoot(withText(R.string.note_detail_related_thoughts)).perform(scrollTo()).check(matches(isDisplayed()))
     }
+
+    private fun onViewRoot(matcher: org.hamcrest.Matcher<android.view.View>): androidx.test.espresso.ViewInteraction =
+        onView(matcher).inRoot(
+            org.hamcrest.Matchers.anyOf(
+                androidx.test.espresso.matcher.RootMatchers.isFocusable(),
+                androidx.test.espresso.matcher.RootMatchers.isPlatformPopup(),
+                androidx.test.espresso.matcher.RootMatchers.isDialog()
+            )
+        )
 
     private fun launchDetail(noteId: Long) {
         val intent = Intent(context, NoteDetailActivity::class.java)

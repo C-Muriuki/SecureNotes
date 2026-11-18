@@ -98,6 +98,59 @@
     <string name="action_connect">Connect</string>
     <string name="action_remove">Remove</string>
     <string name="action_retry">Retry</string>
+
+    <!-- Rediscover Strings -->
+    <string name="rediscover_title">Rediscover</string>
+    <string name="rediscover_subtitle">Revisit forgotten thoughts &amp; unfinished ideas</string>
+    <string name="rediscover_dashboard_card_title">Rediscover Vault</string>
+    <string name="rediscover_dashboard_card_desc">%1$d candidates ready for review</string>
+    <string name="rediscover_tab_today">Today</string>
+    <string name="rediscover_tab_forgotten">Forgotten</string>
+    <string name="rediscover_tab_unfinished">Unfinished</string>
+    <string name="rediscover_tab_connected">Connected</string>
+    <string name="rediscover_tab_queue">Queue</string>
+    <string name="rediscover_score_label">Score %1$d</string>
+    <string name="rediscover_action_revisit">Revisit</string>
+    <string name="rediscover_action_snooze">Snooze</string>
+    <string name="rediscover_action_dismiss">Dismiss</string>
+    <string name="rediscover_action_restore">Restore</string>
+    <string name="rediscover_snooze_title">Snooze Rediscovery</string>
+    <string name="rediscover_snooze_1_day">1 Day</string>
+    <string name="rediscover_snooze_7_days">7 Days</string>
+    <string name="rediscover_snooze_30_days">30 Days</string>
+    <string name="rediscover_empty_title">All caught up!</string>
+    <string name="rediscover_empty_message">No notes need rediscovery right now. Check back later!</string>
+    <string name="rediscover_revisited_toast">Marked as revisited!</string>
+    <string name="rediscover_snoozed_toast">Snoozed for %1$d days</string>
+    <string name="rediscover_dismissed_toast">Dismissed from rediscovery suggestions</string>
+    <string name="rediscover_restored_toast">Restored to rediscovery queue</string>
+
+    <!-- Guided Thinking Strings -->
+    <string name="guided_thinking_title">Guided Thinking</string>
+    <string name="guided_thinking_subtitle">Explore your thoughts, challenge your assumptions, and develop your ideas.</string>
+    <string name="guided_thinking_section_frameworks">Thinking Frameworks</string>
+    <string name="guided_thinking_section_sessions">Your Reflection Sessions</string>
+    <string name="guided_thinking_btn_start_blank">Start Blank Session</string>
+    <string name="guided_thinking_btn_select_note">Reflect on Existing Note</string>
+    <string name="guided_thinking_step_counter">Step %1$d of %2$d</string>
+    <string name="guided_thinking_action_next">Next Step</string>
+    <string name="guided_thinking_action_previous">Previous</string>
+    <string name="guided_thinking_action_complete">Complete Session</string>
+    <string name="guided_thinking_action_create_note">Save as Note</string>
+    <string name="guided_thinking_hint_response">Type your reflection here…</string>
+    <string name="guided_thinking_session_completed_toast">Session completed!</string>
+    <string name="guided_thinking_note_created_toast">New note created from reflection outcome!</string>
+    <string name="guided_thinking_empty_sessions">No reflection sessions yet. Choose a framework above to start!</string>
+    <string name="guided_thinking_status_active">In Progress</string>
+    <string name="guided_thinking_status_completed">Completed</string>
+
+    <!-- Account & Profile Strings -->
+    <string name="action_edit_profile">Edit Profile</string>
+    <string name="edit_profile_dialog_title">Edit Profile</string>
+    <string name="profile_updated_success">Profile updated successfully!</string>
+    <string name="profile_update_failed">Could not update profile. Email may already be in use.</string>
+    <string name="security_architecture_desc">AES-256-GCM cipher with Android KeyStore master key protection and salted PBKDF2 authentication.</string>
+
     <string name="dashboard_section_overview">Vault Overview</string>
     <string name="dashboard_stat_total_notes">Total Notes</string>
     <string name="dashboard_stat_total_notes_val">12 Notes</string>
@@ -113,7 +166,10 @@
     <string name="label_email">Email Address</string>
     <string name="label_username">Username</string>
     <string name="label_password">Master Password</string>
+    <string name="label_current_password">Current Password</string>
+    <string name="label_new_password">New Master Password</string>
     <string name="label_confirm_password">Confirm Master Password</string>
+    <string name="label_change_password">Update Security Password</string>
     <string name="hint_full_name">Enter your full name</string>
     <string name="hint_email">Enter your email address</string>
     <string name="hint_username">Enter your username</string>
@@ -200,8 +256,12 @@
     <string name="password_strength_accessibility">Password strength: %1$s, %2$d of 3 levels.</string>
 
     <string name="error_field_required">This field is required</string>
+    <string name="error_invalid_email">Please enter a valid email address</string>
     <string name="error_invalid_credentials">Invalid email or password</string>
+    <string name="error_incorrect_password">Current password is incorrect</string>
+    <string name="error_password_weak">New password must be at least 8 characters long</string>
     <string name="error_email_exists">An account with this email address already exists</string>
+    <string name="error_username_exists">An account with this username already exists</string>
     <string name="error_login_throttled">Too many failed login attempts. Please wait %1$d seconds.</string>
     <string name="error_passwords_do_not_match">Passwords do not match</string>
     <string name="error_generic">An unexpected error occurred. Please try again.</string>

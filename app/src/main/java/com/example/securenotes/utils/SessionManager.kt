@@ -8,11 +8,13 @@ class SessionManager(context: Context) {
     private val prefs: SharedPreferences =
         context.getSharedPreferences(PREFS_SESSION, Context.MODE_PRIVATE)
 
-    fun saveUserSession(userId: Long, email: String, fullName: String) {
+    fun saveUserSession(userId: Long, email: String, fullName: String, username: String = "") {
+        val cleanUsername = if (username.isBlank()) email.substringBefore('@') else username
         prefs.edit().apply {
             putLong(KEY_USER_ID, userId)
             putString(KEY_USER_EMAIL, email)
             putString(KEY_USER_FULL_NAME, fullName)
+            putString(KEY_USER_USERNAME, cleanUsername)
             putBoolean(KEY_IS_LOGGED_IN, true)
             putLong(KEY_LOGIN_TIME, System.currentTimeMillis())
             apply()
@@ -36,11 +38,16 @@ class SessionManager(context: Context) {
         return prefs.getString(KEY_USER_FULL_NAME, "Security Vault User")
     }
 
+    fun getCurrentUsername(): String? {
+        return prefs.getString(KEY_USER_USERNAME, null) ?: getCurrentUserEmail()?.substringBefore('@')
+    }
+
     fun clearSession() {
         prefs.edit().apply {
             remove(KEY_USER_ID)
             remove(KEY_USER_EMAIL)
             remove(KEY_USER_FULL_NAME)
+            remove(KEY_USER_USERNAME)
             putBoolean(KEY_IS_LOGGED_IN, false)
             remove(KEY_LOGIN_TIME)
             apply()
@@ -52,6 +59,7 @@ class SessionManager(context: Context) {
             remove(KEY_USER_ID)
             remove(KEY_USER_EMAIL)
             remove(KEY_USER_FULL_NAME)
+            remove(KEY_USER_USERNAME)
             putBoolean(KEY_IS_LOGGED_IN, false)
             remove(KEY_LOGIN_TIME)
             commit()
@@ -105,6 +113,7 @@ class SessionManager(context: Context) {
         private const val KEY_USER_ID = "key_user_id"
         private const val KEY_USER_EMAIL = "key_user_email"
         private const val KEY_USER_FULL_NAME = "key_user_full_name"
+        private const val KEY_USER_USERNAME = "key_user_username"
         private const val KEY_IS_LOGGED_IN = "key_is_logged_in"
         private const val KEY_LOGIN_TIME = "key_login_time"
 

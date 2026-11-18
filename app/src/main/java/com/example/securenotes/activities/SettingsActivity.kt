@@ -39,6 +39,7 @@ class SettingsActivity : BaseActivity() {
         setupPrivacyLink()
         setupBackupAction()
         setupNavigation()
+        binding.btnSettingsBack.setOnClickListener { finish() }
     }
 
     override fun onResume() {
@@ -157,12 +158,11 @@ class SettingsActivity : BaseActivity() {
     }
 
     private fun setupNavigation() {
-        binding.bottomNavSettings.selectedItemId = R.id.nav_settings
+        binding.bottomNavSettings.selectedItemId = R.id.nav_account
         binding.bottomNavSettings.setOnItemSelectedListener { item ->
             when (item.itemId) {
-                R.id.nav_home -> { navigateToTab(DashboardActivity::class.java); true }
-                R.id.nav_notes -> { navigateToTab(NotesListActivity::class.java); true }
-                R.id.nav_search -> { navigateToTab(SearchActivity::class.java); true }
+                R.id.nav_notes -> { navigateToTab(DashboardActivity::class.java); true }
+                R.id.nav_account -> { navigateToTab(AccountActivity::class.java); true }
                 else -> true
             }
         }

@@ -17,6 +17,7 @@ import com.example.securenotes.models.Note
 import com.example.securenotes.models.ThoughtConnection
 import com.example.securenotes.networking.WritingPromptRepository
 import com.example.securenotes.repositories.NoteRepository
+import com.example.securenotes.repositories.RediscoveryRepository
 import com.example.securenotes.utils.SessionManager
 import java.util.concurrent.Future
 
@@ -24,6 +25,7 @@ class DashboardActivity : BaseActivity() {
     private lateinit var binding: ActivityDashboardBinding
     private lateinit var session: SessionManager
     private lateinit var repository: NoteRepository
+    private lateinit var rediscoveryRepository: RediscoveryRepository
     private lateinit var connectionsAdapter: ThoughtConnectionAdapter
     private var notesTask: Future<*>? = null
     private var requestId = 0
@@ -34,7 +36,8 @@ class DashboardActivity : BaseActivity() {
         val pinned: List<Note>,
         val totalCount: Int,
         val connections: List<ThoughtConnection>,
-        val stageCounts: Map<IdeaStage, Int>
+        val stageCounts: Map<IdeaStage, Int>,
+        val rediscoverCount: Int
     )
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -43,7 +46,9 @@ class DashboardActivity : BaseActivity() {
         setContentView(binding.root)
         setupEdgeToEdgeInsets(binding.mainDashboard)
         session = SessionManager(applicationContext)
-        repository = NoteRepository(DatabaseHelper(applicationContext))
+        val helper = DatabaseHelper(applicationContext)
+        repository = NoteRepository(helper)
+        rediscoveryRepository = RediscoveryRepository(helper, repository)
         if (!session.isLoggedIn() || session.getCurrentUserId() <= 0) {
             startActivity(Intent(this, LoginActivity::class.java))
             finish()
@@ -68,10 +73,23 @@ class DashboardActivity : BaseActivity() {
         binding.btnExploreConnections.setOnClickListener { openConnectionsHub() }
         binding.tvDashboardConnectionsEmpty.setOnClickListener { openConnectionsHub() }
 
-        binding.cardStageCaptured.setOnClickListener { openStageNotes(IdeaStage.CAPTURED) }
-        binding.cardStageExploring.setOnClickListener { openStageNotes(IdeaStage.EXPLORING) }
-        binding.cardStageDeveloping.setOnClickListener { openStageNotes(IdeaStage.DEVELOPING) }
-        binding.cardStageCompleted.setOnClickListener { openStageNotes(IdeaStage.COMPLETED) }
+        val openRediscoverHub = {
+            startActivity(Intent(this, RediscoverActivity::class.java))
+            if (ValueAnimator.areAnimatorsEnabled()) {
+                overridePendingTransition(R.anim.slide_in_right, R.anim.fade_out)
+            }
+        }
+        binding.cardRediscoverVault.setOnClickListener { openRediscoverHub() }
+        binding.btnOpenRediscover.setOnClickListener { openRediscoverHub() }
+
+        val openGuidedThinkingHub = {
+            startActivity(Intent(this, GuidedThinkingActivity::class.java))
+            if (ValueAnimator.areAnimatorsEnabled()) {
+                overridePendingTransition(R.anim.slide_in_right, R.anim.fade_out)
+            }
+        }
+        binding.cardGuidedThinking.setOnClickListener { openGuidedThinkingHub() }
+        binding.btnOpenGuidedThinking.setOnClickListener { openGuidedThinkingHub() }
 
         setupNavigation()
         loadWritingPrompt()
@@ -79,14 +97,10 @@ class DashboardActivity : BaseActivity() {
 
     override fun onResume() {
         super.onResume()
-        if (::binding.isInitialized && ::session.isInitialized && session.isLoggedIn()) refreshNotes()
-    }
-
-    private fun openStageNotes(stage: IdeaStage) {
-        val intent = Intent(this, NotesListActivity::class.java).apply {
-            putExtra(EXTRA_STAGE_FILTER, stage.value)
+        if (::binding.isInitialized && ::session.isInitialized && session.isLoggedIn()) {
+            binding.tvUserGreeting.text = getString(R.string.dashboard_greeting, session.getCurrentUserFullName() ?: "User")
+            refreshNotes()
         }
-        startActivity(intent)
     }
 
     private fun loadWritingPrompt() {
@@ -107,21 +121,23 @@ class DashboardActivity : BaseActivity() {
         val userId = session.getCurrentUserId()
         binding.tvTotalNotesCount.text = getString(R.string.state_loading_notes)
         notesTask = runIo({
+            val candidates = rediscoveryRepository.getRediscoveryCandidates(userId, limit = 0)
             DashboardNotes(
                 recent = repository.getRecentNotes(userId, 5),
                 pinned = repository.getNotes(userId, pinned = true),
                 totalCount = repository.countNotes(userId),
                 connections = repository.getRecentConnections(userId, limit = 3),
-                stageCounts = repository.getIdeaStageCounts(userId)
+                stageCounts = repository.getIdeaStageCounts(userId),
+                rediscoverCount = candidates.size
             )
         }) { result ->
             if (currentRequest != requestId) return@runIo
             result.onSuccess { snapshot ->
                 binding.tvTotalNotesCount.text = snapshot.totalCount.toString()
-                binding.tvCountCaptured.text = (snapshot.stageCounts[IdeaStage.CAPTURED] ?: 0).toString()
-                binding.tvCountExploring.text = (snapshot.stageCounts[IdeaStage.EXPLORING] ?: 0).toString()
-                binding.tvCountDeveloping.text = (snapshot.stageCounts[IdeaStage.DEVELOPING] ?: 0).toString()
-                binding.tvCountCompleted.text = (snapshot.stageCounts[IdeaStage.COMPLETED] ?: 0).toString()
+                binding.tvPinnedNotesCount.text = snapshot.pinned.size.toString()
+
+                binding.tvRediscoverCountBadge.text = snapshot.rediscoverCount.toString()
+                binding.tvRediscoverDesc.text = getString(R.string.rediscover_dashboard_card_desc, snapshot.rediscoverCount)
 
                 binding.rvPinnedNotes.adapter = PinnedNotesAdapter(snapshot.pinned) { openNote(it) }
                 val recent = NotesAdapter(
@@ -198,16 +214,15 @@ class DashboardActivity : BaseActivity() {
     }
 
     private fun setupNavigation() {
-        binding.btnProfile.setOnClickListener { startActivity(Intent(this, AccountActivity::class.java)) }
+        binding.btnProfile.setOnClickListener { navigateToTab(AccountActivity::class.java) }
         binding.cardSearchEntry.setOnClickListener { navigateToTab(SearchActivity::class.java) }
         installPressFeedback(binding.fabCreateNote)
         binding.fabCreateNote.setOnClickListener { startActivity(Intent(this, NoteEditorActivity::class.java)) }
-        binding.bottomNav.selectedItemId = R.id.nav_home
+        binding.bottomNav.selectedItemId = R.id.nav_notes
         binding.bottomNav.setOnItemSelectedListener { item ->
             when (item.itemId) {
-                R.id.nav_notes -> { navigateToTab(NotesListActivity::class.java); true }
-                R.id.nav_search -> { navigateToTab(SearchActivity::class.java); true }
-                R.id.nav_settings -> { navigateToTab(SettingsActivity::class.java); true }
+                R.id.nav_notes -> true
+                R.id.nav_account -> { navigateToTab(AccountActivity::class.java); true }
                 else -> true
             }
         }
